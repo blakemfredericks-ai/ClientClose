@@ -1,155 +1,903 @@
 <!DOCTYPE html>
-<!--
-  ================================================================
-  READ THIS BEFORE YOU PASTE ANYTHING
-
-  When Gemini gives you a page, you do NOT paste it into a part of
-  this file. You replace the entire file.
-
-  Click into the editor, press Ctrl+A (Cmd+A on Mac), press Delete,
-  then paste. Everything here is meant to be thrown away.
-
-  Do that only AFTER your live link works. Get the link first.
-  ================================================================
--->
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My first site</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy: #0d1d30;
-    --card: #142a44;
-    --line: #27466a;
-    --aqua: #6de1d7;
-    --text: #ffffff;
-    --muted: #94a9bf;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--navy);
-    color: var(--text);
-    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-    line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    padding: 6vh 20px;
-  }
-  main { width: 100%; max-width: 640px; }
-  .badge {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--aqua);
-    margin-bottom: 18px;
-  }
-  h1 {
-    font-family: "Unbounded", "Manrope", sans-serif;
-    font-weight: 800;
-    font-size: clamp(38px, 9vw, 68px);
-    letter-spacing: -0.05em;
-    line-height: 1.02;
-    margin: 0 0 8px;
-  }
-  .name {
-    font-family: "Unbounded", "Manrope", sans-serif;
-    font-weight: 600;
-    font-size: clamp(18px, 4vw, 24px);
-    letter-spacing: -0.04em;
-    color: var(--aqua);
-    margin: 0 0 24px;
-  }
-  p.lead { font-size: 18px; color: var(--muted); margin: 0 0 34px; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 26px 28px;
-    margin-bottom: 18px;
-  }
-  .card h2 {
-    font-family: "Unbounded", "Manrope", sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-    color: var(--aqua);
-    margin: 0 0 16px;
-  }
-  ol { margin: 0; padding-left: 20px; }
-  li { margin-bottom: 12px; color: var(--muted); }
-  li:last-child { margin-bottom: 0; }
-  li b { color: var(--text); font-weight: 700; }
-  code {
-    font-family: ui-monospace, "SF Mono", Consolas, monospace;
-    font-size: 0.92em;
-    background: #0a1727;
-    border: 1px solid var(--line);
-    border-radius: 5px;
-    padding: 1px 6px;
-    color: var(--aqua);
-  }
-  a { color: var(--aqua); }
-  footer {
-    margin-top: 30px;
-    font-size: 14px;
-    color: #6e839a;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROPEL CRE | Predictive Prospecting & Cold Calling Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0B0E14;
+            --bg-surface: #121824;
+            --bg-surface-elevated: #1A2232;
+            --bg-hover: #222C3E;
+            
+            --border-subtle: #1E293B;
+            --border-strong: #334155;
+            
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --text-dark: #64748B;
+            
+            --accent-green: #10B981;
+            --accent-green-glow: rgba(16, 185, 129, 0.15);
+            --accent-yellow: #F59E0B;
+            --accent-yellow-glow: rgba(245, 158, 11, 0.15);
+            --accent-red: #EF4444;
+            --accent-blue: #3B82F6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.15);
+            --accent-purple: #8B5CF6;
+
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Header */
+        header {
+            height: 56px;
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+        }
+
+        .brand-logo {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .header-metrics {
+            display: flex;
+            gap: 24px;
+        }
+
+        .metric-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-surface-elevated);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            font-size: 12px;
+        }
+
+        .metric-pill .val {
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        /* Main Workspace Layout */
+        .workspace {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 56px);
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        nav.sidebar {
+            width: 64px;
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            gap: 20px;
+        }
+
+        .nav-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--bg-surface-elevated);
+            color: var(--accent-blue);
+        }
+
+        .nav-item.active {
+            border-left: 3px solid var(--accent-blue);
+            border-radius: 2px 8px 8px 2px;
+        }
+
+        /* Column 1: Pipeline Prospecting List */
+        .panel-pipeline {
+            width: 420px;
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-base);
+        }
+
+        .panel-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            background-color: var(--bg-surface);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-chip {
+            padding: 4px 10px;
+            border-radius: 4px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .filter-chip.active {
+            background: var(--accent-blue-glow);
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .prospect-list {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .prospect-card {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: background 0.15s;
+            position: relative;
+        }
+
+        .prospect-card:hover {
+            background-color: var(--bg-surface);
+        }
+
+        .prospect-card.active {
+            background-color: var(--bg-surface-elevated);
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .property-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .property-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .propensity-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .tag-high {
+            background: var(--accent-green-glow);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tag-med {
+            background: var(--accent-yellow-glow);
+            color: var(--accent-yellow);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .card-signals {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: var(--text-dark);
+            margin-top: 8px;
+        }
+
+        .signal-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .signal-item strong {
+            color: var(--text-muted);
+        }
+
+        /* Column 2: Deep Analytics & Property View */
+        .panel-analytics {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background-color: var(--bg-base);
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        .analytics-header {
+            padding: 20px;
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .analytics-title h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .analytics-title p {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            padding: 0 20px 20px 20px;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .card-header-sm {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Predictive Radar/Score Display */
+        .score-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-green) 0% 88%, var(--bg-surface-elevated) 88% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--bg-surface);
+        }
+
+        .score-val {
+            position: relative;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .driver-list {
+            list-style: none;
+            flex: 1;
+        }
+
+        .driver-list li {
+            font-size: 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .driver-list .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        /* Comps Table */
+        .table-comps {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .table-comps th {
+            color: var(--text-dark);
+            padding: 8px;
+            border-bottom: 1px solid var(--border-subtle);
+            font-weight: 500;
+        }
+
+        .table-comps td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+        }
+
+        .table-comps tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-comps td.highlight {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Column 3: Cold Calling Power Command Center */
+        .panel-dialer {
+            width: 380px;
+            background-color: var(--bg-surface);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dialer-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .contact-card {
+            padding: 16px;
+            background: var(--bg-surface-elevated);
+            margin: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .contact-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .contact-role {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .contact-detail {
+            font-size: 12px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .dialer-controls {
+            padding: 0 16px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: filter 0.2s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-call {
+            background-color: var(--accent-green);
+            color: #000;
+        }
+
+        .btn-end {
+            background-color: var(--accent-red);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-surface-elevated);
+            color: var(--text-main);
+            border: 1px solid var(--border-strong);
+        }
+
+        /* Battlecard / Talking Points */
+        .battlecard {
+            margin: 0 16px;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .battlecard-title {
+            color: var(--accent-blue);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .talking-point {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 2px solid var(--accent-blue);
+        }
+
+        /* Disposition Form */
+        .disposition-area {
+            padding: 16px;
+            border-top: 1px solid var(--border-subtle);
+            background-color: var(--bg-surface);
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        select, textarea {
+            width: 100%;
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        textarea {
+            resize: none;
+            height: 50px;
+        }
+
+        /* SVG Icons Inline Styling */
+        .icon {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
 </head>
 <body>
-<main>
 
-  <span class="badge">Cal Poly Vibe Coding &middot; Session 01</span>
+    <header>
+        <div class="brand">
+            <div class="brand-logo">P</div>
+            PROPEL CRE
+        </div>
 
-  <h1>It&rsquo;s live.</h1>
+        <div class="header-metrics">
+            <div class="metric-pill">
+                <span>Daily Calls:</span>
+                <span class="val">42 / 60</span>
+            </div>
+            <div class="metric-pill">
+                <span>Connect Rate:</span>
+                <span class="val">28%</span>
+            </div>
+            <div class="metric-pill">
+                <span>Pipeline Sourced:</span>
+                <span class="val">$14.2M</span>
+            </div>
+        </div>
 
-  <!-- Step 5: change the name below to yours, then commit. -->
-  <p class="name">Built by Blake Fredericks</p>
+        <div class="user-profile">
+            <span style="font-size:12px; font-weight:500;">Austin (Industrial Team)</span>
+            <div class="avatar">AM</div>
+        </div>
+    </header>
 
-  <p class="lead">
-    This page is on the internet. Anyone you send this link to can open it,
-    on any device, right now. You made that happen in about five minutes.
-  </p>
+    <div class="workspace">
 
-  <div class="card">
-    <h2>Three things, in this order</h2>
-    <ol>
-      <li><b>Put your name on it.</b> Edit <code>index.html</code>, change
-        YOUR NAME HERE above, commit, refresh this page.</li>
-      <li><b>Submit this link.</b> Go to
-        <a href="https://www.calpolyvibecoding.com/">calpolyvibecoding.com</a>,
-        make an account, and paste this URL in. That is how you get counted,
-        and how Claude seats get assigned.</li>
-      <li><b>Then build.</b> Open Gemini, get a page, and replace this entire
-        file with it.</li>
-    </ol>
-  </div>
+        <nav class="sidebar">
+            <div class="nav-item active" title="Predictive Prospecting">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <div class="nav-item" title="Cadences / Cold Calling">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="nav-item" title="Market Comps & Analytics">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="nav-item" title="Saved Databases">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"/><line x1="4" y1="10" x2="20" y2="10"/></svg>
+            </div>
+        </nav>
 
-  <div class="card">
-    <h2>How to replace this page</h2>
-    <ol>
-      <li>Copy what Gemini gives you with the <b>copy button</b> on the code
-        block. Do not click and drag.</li>
-      <li>Open <code>index.html</code> here and click the pencil icon.</li>
-      <li><b>Ctrl+A</b> (<b>Cmd+A</b> on Mac), then <b>Delete</b>. All of it.
-        Yes, really.</li>
-      <li>Paste, commit, refresh.</li>
-    </ol>
-  </div>
+        <section class="panel-pipeline">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>Ranked Prospects</span>
+                    <span style="font-size: 11px; color: var(--accent-blue); cursor: pointer;">Filters (3)</span>
+                </div>
+                <div class="filter-bar">
+                    <div class="filter-chip active">Likely Sellers</div>
+                    <div class="filter-chip">Refinance Due</div>
+                    <div class="filter-chip">High Debt</div>
+                </div>
+            </div>
 
-  <footer>
-    Nothing on this page is precious. It exists so the link has something to
-    show before you have something of your own.
-  </footer>
+            <div class="prospect-list">
+                <div class="prospect-card active">
+                    <div class="card-top">
+                        <div class="property-name">Midwest Logistics Hub</div>
+                        <div class="propensity-tag tag-high">
+                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                            88% Propensity
+                        </div>
+                    </div>
+                    <div class="property-sub">142,000 SF • Class B Industrial • O'Hare Submarket</div>
+                    <div class="card-signals">
+                        <div class="signal-item"><strong>Tenure:</strong> 9.4 Yrs</div>
+                        <div class="signal-item"><strong>Debt Maturity:</strong> 4 Mos</div>
+                    </div>
+                </div>
 
-</main>
+                <div class="prospect-card">
+                    <div class="card-top">
+                        <div class="property-name">Apex Flex Logistics Park</div>
+                        <div class="propensity-tag tag-high">
+                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                            82% Propensity
+                        </div>
+                    </div>
+                    <div class="property-sub">88,500 SF • Industrial • Elgin Submarket</div>
+                    <div class="card-signals">
+                        <div class="signal-item"><strong>Tenure:</strong> 11.2 Yrs</div>
+                        <div class="signal-item"><strong>Comp Outlier:</strong> +22% Cap</div>
+                    </div>
+                </div>
+
+                <div class="prospect-card">
+                    <div class="card-top">
+                        <div class="property-name">Southlake Commerce Center</div>
+                        <div class="propensity-tag tag-med">
+                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                            64% Propensity
+                        </div>
+                    </div>
+                    <div class="property-sub">210,000 SF • Multi-Tenant • I-55 Corridor</div>
+                    <div class="card-signals">
+                        <div class="signal-item"><strong>Tenure:</strong> 6.1 Yrs</div>
+                        <div class="signal-item"><strong>Vacant:</strong> 18%</div>
+                    </div>
+                </div>
+
+                <div class="prospect-card">
+                    <div class="card-top">
+                        <div class="property-name">Oakton Industrial Plaza</div>
+                        <div class="propensity-tag tag-med">
+                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                            59% Propensity
+                        </div>
+                    </div>
+                    <div class="property-sub">45,000 SF • Infill Warehouse • Des Plaines</div>
+                    <div class="card-signals">
+                        <div class="signal-item"><strong>Tenure:</strong> 14.0 Yrs</div>
+                        <div class="signal-item"><strong>Owner:</strong> Private Individual</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-analytics">
+            <div class="analytics-header">
+                <div class="analytics-title">
+                    <h2>Midwest Logistics Hub</h2>
+                    <p>10400 W. Higgins Rd, Rosemont, IL • Owned by Apex Midwest Holdings LLC</p>
+                </div>
+                <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:11px;">
+                    View Parcel Map
+                </button>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header-sm">
+                        <span>Sell Propensity Breakdown</span>
+                        <span style="color:var(--accent-green)">High Transaction Probability</span>
+                    </div>
+                    <div class="score-container">
+                        <div class="score-circle">
+                            <div class="score-val">88</div>
+                        </div>
+                        <ul class="driver-list">
+                            <li>
+                                <span><span class="dot" style="background:var(--accent-green)"></span>Hold Period (>8yr avg)</span>
+                                <strong style="color:var(--text-main)">9.4 Yrs</strong>
+                            </li>
+                            <li>
+                                <span><span class="dot" style="background:var(--accent-green)"></span>CMBS Loan Maturity</span>
+                                <strong style="color:var(--accent-red)">Q4 2026</strong>
+                            </li>
+                            <li>
+                                <span><span class="dot" style="background:var(--accent-yellow)"></span>Submarket Cap Rate Spread</span>
+                                <strong style="color:var(--text-main)">+45 bps</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header-sm">Ownership & Valuation Profile</div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:6px;">
+                        <div>
+                            <div style="font-size:11px; color:var(--text-dark);">Est. Value Range</div>
+                            <div style="font-size:16px; font-weight:700; color:var(--text-main); margin-top:2px;">$18.5M - $20.2M</div>
+                            <div style="font-size:11px; color:var(--accent-green); margin-top:2px;">$134 / SF</div>
+                        </div>
+                        <div>
+                            <div style="font-size:11px; color:var(--text-dark);">Original Purchase</div>
+                            <div style="font-size:14px; font-weight:600; color:var(--text-main); margin-top:2px;">$12.1M (2017)</div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Implied Gain: +57%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-3" style="grid-column: span 2;">
+                <div class="card" style="grid-column: span 3;">
+                    <div class="card-header-sm">
+                        <span>Predictive Pattern Matching: Relevant Submarket Comps</span>
+                        <span style="color:var(--accent-blue);">3 Comparable Deals Flagged</span>
+                    </div>
+                    <table class="table-comps">
+                        <thead>
+                            <tr>
+                                <th>Property Address</th>
+                                <th>Sale Date</th>
+                                <th>Sale Price</th>
+                                <th>$/SF</th>
+                                <th>Cap Rate</th>
+                                <th>Similarity Index</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="highlight">9801 W. Devon Ave, Rosemont</td>
+                                <td>30 Days Ago</td>
+                                <td>$19,400,000</td>
+                                <td>$138/SF</td>
+                                <td>6.1%</td>
+                                <td><span style="color:var(--accent-green); font-weight:600;">94% Match</span></td>
+                            </tr>
+                            <tr>
+                                <td class="highlight">1050 Busse Hwy, Park Ridge</td>
+                                <td>2 Mos Ago</td>
+                                <td>$12,100,000</td>
+                                <td>$129/SF</td>
+                                <td>6.4%</td>
+                                <td><span style="color:var(--accent-green); font-weight:600;">89% Match</span></td>
+                            </tr>
+                            <tr>
+                                <td class="highlight">8800 Touhy Ave, Des Plaines</td>
+                                <td>4 Mos Ago</td>
+                                <td>$24,500,000</td>
+                                <td>$131/SF</td>
+                                <td>5.95%</td>
+                                <td><span style="color:var(--accent-yellow); font-weight:600;">78% Match</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-dialer">
+            <div class="dialer-header">
+                <span>Power Prospector</span>
+                <span style="font-size:11px; font-weight:normal; color:var(--accent-green); display:flex; align-items:center; gap:4px;">
+                    <span style="width:6px; height:6px; background:var(--accent-green); border-radius:50%;"></span>
+                    Line Ready
+                </span>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-name">Robert Vance</div>
+                <div class="contact-role">Managing Principal @ Apex Midwest Holdings</div>
+                <div class="contact-detail">
+                    <span style="color:var(--text-dark)">Direct Phone:</span>
+                    <span style="font-weight:600; color:var(--text-main);">(312) 555-0194</span>
+                </div>
+                <div class="contact-detail">
+                    <span style="color:var(--text-dark)">HQ Location:</span>
+                    <span style="color:var(--text-muted)">Chicago, IL</span>
+                </div>
+                <div class="contact-detail">
+                    <span style="color:var(--text-dark)">Ownership Type:</span>
+                    <span style="color:var(--text-muted)">Private Equity (Regional)</span>
+                </div>
+            </div>
+
+            <div class="dialer-controls">
+                <button class="btn btn-call">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Dial Contact Now
+                </button>
+            </div>
+
+            <div class="battlecard">
+                <div class="battlecard-title">
+                    <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    AI Context & Hook Generator
+                </div>
+                <div class="talking-point">
+                    <strong>Refinance Hook:</strong> "Robert, noticed your debt on Higgins Rd is coming up in Q4. Refi rates are ~200bps higher than your 2017 baseline—have you considered testing the market?"
+                </div>
+                <div class="talking-point">
+                    <strong>Comp Leverage:</strong> "9801 Devon just traded down the street at $138/SF (6.1% cap). That’s a peak benchmark for your asset class right now."
+                </div>
+            </div>
+
+            <div class="disposition-area">
+                <div class="form-group">
+                    <label>Call Outcome / Disposition</label>
+                    <select>
+                        <option>Select Outcome...</option>
+                        <option>Connected - Corrective Pitch Made</option>
+                        <option>Follow Up Requested (Send OM)</option>
+                        <option>Left Voicemail</option>
+                        <option>Not Interested / Holding Long Term</option>
+                        <option>Wrong Number / Outdated Contact</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Call Notes / Context</label>
+                    <textarea placeholder="e.g. Owner expressed interest in 1031 exchange options if price hits $20M..."></textarea>
+                </div>
+                <button class="btn btn-secondary">
+                    Log Activity & Advance Pipeline
+                </button>
+            </div>
+        </section>
+
+    </div>
+
 </body>
 </html>

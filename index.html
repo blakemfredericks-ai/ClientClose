@@ -60,6 +60,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
+            position: relative;
             z-index: 10;
         }
 
@@ -131,6 +132,8 @@
             flex: 1;
             height: calc(100vh - 56px);
             overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
 
         /* Sidebar Navigation */
@@ -143,6 +146,8 @@
             align-items: center;
             padding: 16px 0;
             gap: 20px;
+            position: relative;
+            z-index: 2;
         }
 
         .nav-item {
@@ -155,6 +160,8 @@
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
+            z-index: 3;
         }
 
         .nav-item:hover, .nav-item.active {
@@ -174,6 +181,8 @@
             display: flex;
             flex-direction: column;
             background-color: var(--bg-base);
+            position: relative;
+            z-index: 2;
         }
 
         .panel-header {
@@ -207,6 +216,8 @@
             font-weight: 500;
             user-select: none;
             transition: all 0.15s;
+            position: relative;
+            z-index: 3;
         }
 
         .filter-chip.active {
@@ -226,6 +237,7 @@
             cursor: pointer;
             transition: background 0.15s;
             position: relative;
+            z-index: 3;
         }
 
         .prospect-card:hover {
@@ -298,6 +310,8 @@
             overflow-y: auto;
             background-color: var(--bg-base);
             border-right: 1px solid var(--border-subtle);
+            position: relative;
+            z-index: 2;
         }
 
         .analytics-header {
@@ -444,6 +458,8 @@
             background-color: var(--bg-surface);
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 2;
         }
 
         .dialer-header {
@@ -529,6 +545,8 @@
             gap: 8px;
             transition: all 0.2s;
             user-select: none;
+            position: relative;
+            z-index: 5;
         }
 
         .btn:hover {
@@ -628,6 +646,8 @@
             font-family: inherit;
             font-size: 12px;
             outline: none;
+            position: relative;
+            z-index: 5;
         }
 
         select:focus, textarea:focus {
@@ -647,17 +667,25 @@
             stroke-width: 2;
             stroke-linecap: round;
             stroke-linejoin: round;
+            pointer-events: none;
         }
 
-        /* Modal Dialog */
+        /* Modal Dialog - STRICTLY HIDDEN UNLESS ACTIVE */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.7);
-            z-index: 100;
+            z-index: -1;
             align-items: center;
             justify-content: center;
+            pointer-events: none;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            z-index: 9999;
+            pointer-events: auto;
         }
 
         .modal {
@@ -682,7 +710,7 @@
             line-height: 1.4;
         }
 
-        /* Toast Notifications */
+        /* Toast Notifications Container */
         .toast-container {
             position: fixed;
             bottom: 20px;
@@ -690,7 +718,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            z-index: 200;
+            z-index: 10000;
+            pointer-events: none;
         }
 
         .toast {
@@ -702,6 +731,7 @@
             font-size: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             animation: slideIn 0.2s forwards;
+            pointer-events: auto;
         }
 
         @keyframes slideIn {
@@ -742,16 +772,16 @@
     <div class="workspace">
 
         <nav class="sidebar">
-            <div class="nav-item active" onclick="switchTab(this, 'Predictive Prospecting')" title="Predictive Prospecting">
+            <div class="nav-item active" id="nav-1" title="Predictive Prospecting">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
-            <div class="nav-item" onclick="switchTab(this, 'Cadences / Cold Calling')" title="Cadences / Cold Calling">
+            <div class="nav-item" id="nav-2" title="Cadences / Cold Calling">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </div>
-            <div class="nav-item" onclick="switchTab(this, 'Market Comps & Analytics')" title="Market Comps & Analytics">
+            <div class="nav-item" id="nav-3" title="Market Comps & Analytics">
                 <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             </div>
-            <div class="nav-item" onclick="switchTab(this, 'Saved Databases')" title="Saved Databases">
+            <div class="nav-item" id="nav-4" title="Saved Databases">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"/><line x1="4" y1="10" x2="20" y2="10"/></svg>
             </div>
         </nav>
@@ -760,12 +790,12 @@
             <div class="panel-header">
                 <div class="panel-title">
                     <span>Ranked Prospects</span>
-                    <span style="font-size: 11px; color: var(--accent-blue); cursor: pointer;" onclick="clearFilters()">Reset Filters</span>
+                    <span id="reset-filters-btn" style="font-size: 11px; color: var(--accent-blue); cursor: pointer;">Reset Filters</span>
                 </div>
                 <div class="filter-bar">
-                    <div class="filter-chip active" onclick="filterProspects(this, 'all')">All Ranked</div>
-                    <div class="filter-chip" onclick="filterProspects(this, 'high')">High Score</div>
-                    <div class="filter-chip" onclick="filterProspects(this, 'refi')">Refinance Due</div>
+                    <div class="filter-chip active" id="filter-all">All Ranked</div>
+                    <div class="filter-chip" id="filter-high">High Score</div>
+                    <div class="filter-chip" id="filter-refi">Refinance Due</div>
                 </div>
             </div>
 
@@ -779,7 +809,7 @@
                     <h2 id="prop-title">Midwest Logistics Hub</h2>
                     <p id="prop-address">10400 W. Higgins Rd, Rosemont, IL • Owned by Apex Midwest Holdings LLC</p>
                 </div>
-                <button class="btn btn-secondary" onclick="openMapModal()" style="width:auto; padding:6px 12px; font-size:11px;">
+                <button class="btn btn-secondary" id="open-map-btn" style="width:auto; padding:6px 12px; font-size:11px;">
                     View Parcel Map
                 </button>
             </div>
@@ -868,7 +898,7 @@
 
             <div class="dialer-controls">
                 <div class="call-timer" id="call-timer-display">IN CALL — 00:00</div>
-                <button class="btn btn-call" id="dial-btn" onclick="toggleCall()">
+                <button class="btn btn-call" id="dial-btn">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     <span id="dial-btn-text">Dial Contact Now</span>
                 </button>
@@ -899,7 +929,7 @@
                     <label>Call Notes / Context</label>
                     <textarea id="disposition-notes" placeholder="e.g. Owner expressed interest in 1031 exchange options..."></textarea>
                 </div>
-                <button class="btn btn-secondary" onclick="logActivity()">
+                <button class="btn btn-secondary" id="log-activity-btn">
                     Log Activity & Advance Pipeline
                 </button>
             </div>
@@ -913,404 +943,423 @@
             <div class="modal-body" id="modal-body">
                 Loading GIS boundary data and satellite overlays for property...
             </div>
-            <button class="btn btn-secondary" onclick="closeModal()">Close Window</button>
+            <button class="btn btn-secondary" id="close-modal-btn">Close Window</button>
         </div>
     </div>
 
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        // Data Store
-        const prospectsData = [
-            {
-                id: 1,
-                name: "Midwest Logistics Hub",
-                address: "10400 W. Higgins Rd, Rosemont, IL",
-                owner: "Apex Midwest Holdings LLC",
-                submarket: "142,000 SF • Class B Industrial • O'Hare Submarket",
-                propensity: 88,
-                propensityLevel: "high",
-                tenure: "9.4 Yrs",
-                debtMaturity: "4 Mos",
-                typeTag: "refi",
-                valRange: "$18.5M - $20.2M",
-                psf: "$134 / SF",
-                origPurchase: "$12.1M (2017)",
-                gain: "Implied Gain: +57%",
-                drivers: [
-                    { label: "Hold Period (>8yr avg)", val: "9.4 Yrs", color: "var(--accent-green)" },
-                    { label: "CMBS Loan Maturity", val: "Q4 2026", color: "var(--accent-red)" },
-                    { label: "Submarket Cap Rate Spread", val: "+45 bps", color: "var(--accent-yellow)" }
-                ],
-                contact: {
-                    name: "Robert Vance",
-                    role: "Managing Principal @ Apex Midwest Holdings",
-                    phone: "(312) 555-0194",
-                    hq: "Chicago, IL",
-                    type: "Private Equity (Regional)"
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Data Store
+            const prospectsData = [
+                {
+                    id: 1,
+                    name: "Midwest Logistics Hub",
+                    address: "10400 W. Higgins Rd, Rosemont, IL",
+                    owner: "Apex Midwest Holdings LLC",
+                    submarket: "142,000 SF • Class B Industrial • O'Hare Submarket",
+                    propensity: 88,
+                    propensityLevel: "high",
+                    tenure: "9.4 Yrs",
+                    debtMaturity: "4 Mos",
+                    typeTag: "refi",
+                    valRange: "$18.5M - $20.2M",
+                    psf: "$134 / SF",
+                    origPurchase: "$12.1M (2017)",
+                    gain: "Implied Gain: +57%",
+                    drivers: [
+                        { label: "Hold Period (>8yr avg)", val: "9.4 Yrs", color: "var(--accent-green)" },
+                        { label: "CMBS Loan Maturity", val: "Q4 2026", color: "var(--accent-red)" },
+                        { label: "Submarket Cap Rate Spread", val: "+45 bps", color: "var(--accent-yellow)" }
+                    ],
+                    contact: {
+                        name: "Robert Vance",
+                        role: "Managing Principal @ Apex Midwest Holdings",
+                        phone: "(312) 555-0194",
+                        hq: "Chicago, IL",
+                        type: "Private Equity (Regional)"
+                    },
+                    battlecard: [
+                        "<strong>Refinance Hook:</strong> \"Robert, noticed your debt on Higgins Rd is coming up in Q4. Refi rates are ~200bps higher than your 2017 baseline—have you considered testing the market?\"",
+                        "<strong>Comp Leverage:</strong> \"9801 Devon just traded down the street at $138/SF (6.1% cap). That’s a peak benchmark for your asset class right now.\""
+                    ],
+                    comps: [
+                        { address: "9801 W. Devon Ave, Rosemont", date: "30 Days Ago", price: "$19,400,000", psf: "$138/SF", cap: "6.1%", match: "94% Match", color: "var(--accent-green)" },
+                        { address: "1050 Busse Hwy, Park Ridge", date: "2 Mos Ago", price: "$12,100,000", psf: "$129/SF", cap: "6.4%", match: "89% Match", color: "var(--accent-green)" },
+                        { address: "8800 Touhy Ave, Des Plaines", date: "4 Mos Ago", price: "$24,500,000", psf: "$131/SF", cap: "5.95%", match: "78% Match", color: "var(--accent-yellow)" }
+                    ]
                 },
-                battlecard: [
-                    "<strong>Refinance Hook:</strong> \"Robert, noticed your debt on Higgins Rd is coming up in Q4. Refi rates are ~200bps higher than your 2017 baseline—have you considered testing the market?\"",
-                    "<strong>Comp Leverage:</strong> \"9801 Devon just traded down the street at $138/SF (6.1% cap). That’s a peak benchmark for your asset class right now.\""
-                ],
-                comps: [
-                    { address: "9801 W. Devon Ave, Rosemont", date: "30 Days Ago", price: "$19,400,000", psf: "$138/SF", cap: "6.1%", match: "94% Match", color: "var(--accent-green)" },
-                    { address: "1050 Busse Hwy, Park Ridge", date: "2 Mos Ago", price: "$12,100,000", psf: "$129/SF", cap: "6.4%", match: "89% Match", color: "var(--accent-green)" },
-                    { address: "8800 Touhy Ave, Des Plaines", date: "4 Mos Ago", price: "$24,500,000", psf: "$131/SF", cap: "5.95%", match: "78% Match", color: "var(--accent-yellow)" }
-                ]
-            },
-            {
-                id: 2,
-                name: "Apex Flex Logistics Park",
-                address: "2400 Northwest Hwy, Elgin, IL",
-                owner: "Elgin Industrial Partners JV",
-                submarket: "88,500 SF • Industrial • Elgin Submarket",
-                propensity: 82,
-                propensityLevel: "high",
-                tenure: "11.2 Yrs",
-                debtMaturity: "14 Mos",
-                typeTag: "high",
-                valRange: "$11.2M - $12.5M",
-                psf: "$128 / SF",
-                origPurchase: "$6.8M (2013)",
-                gain: "Implied Gain: +72%",
-                drivers: [
-                    { label: "Excess Hold Tenure", val: "11.2 Yrs", color: "var(--accent-green)" },
-                    { label: "Unlevered Yield Compression", val: "5.8% Cap", color: "var(--accent-green)" },
-                    { label: "Local Demand Surge", val: "+14% Rent", color: "var(--accent-yellow)" }
-                ],
-                contact: {
-                    name: "Sarah Lin",
-                    role: "VP of Real Estate @ Elgin Industrial Partners",
-                    phone: "(847) 555-8831",
-                    hq: "Schaumburg, IL",
-                    type: "Joint Venture / Syndicator"
+                {
+                    id: 2,
+                    name: "Apex Flex Logistics Park",
+                    address: "2400 Northwest Hwy, Elgin, IL",
+                    owner: "Elgin Industrial Partners JV",
+                    submarket: "88,500 SF • Industrial • Elgin Submarket",
+                    propensity: 82,
+                    propensityLevel: "high",
+                    tenure: "11.2 Yrs",
+                    debtMaturity: "14 Mos",
+                    typeTag: "high",
+                    valRange: "$11.2M - $12.5M",
+                    psf: "$128 / SF",
+                    origPurchase: "$6.8M (2013)",
+                    gain: "Implied Gain: +72%",
+                    drivers: [
+                        { label: "Excess Hold Tenure", val: "11.2 Yrs", color: "var(--accent-green)" },
+                        { label: "Unlevered Yield Compression", val: "5.8% Cap", color: "var(--accent-green)" },
+                        { label: "Local Demand Surge", val: "+14% Rent", color: "var(--accent-yellow)" }
+                    ],
+                    contact: {
+                        name: "Sarah Lin",
+                        role: "VP of Real Estate @ Elgin Industrial Partners",
+                        phone: "(847) 555-8831",
+                        hq: "Schaumburg, IL",
+                        type: "Joint Venture / Syndicator"
+                    },
+                    battlecard: [
+                        "<strong>Tenure Hook:</strong> \"Sarah, you've held Elgin Flex for over 11 years. Yields in Elgin submarket are peaking—are you guys open to taking profit to redeploy?\"",
+                        "<strong>Demand Hook:</strong> \"Flex industrial vacancy in Northwest Hwy is under 3%. Buyers are paying premiums for this scale.\""
+                    ],
+                    comps: [
+                        { address: "2100 Randall Rd, Elgin", date: "12 Days Ago", price: "$11,800,000", psf: "$130/SF", cap: "6.0%", match: "96% Match", color: "var(--accent-green)" },
+                        { address: "150 Dunlop Ave, Dundee", date: "3 Mos Ago", price: "$8,900,000", psf: "$122/SF", cap: "6.5%", match: "83% Match", color: "var(--accent-yellow)" }
+                    ]
                 },
-                battlecard: [
-                    "<strong>Tenure Hook:</strong> \"Sarah, you've held Elgin Flex for over 11 years. Yields in Elgin submarket are peaking—are you guys open to taking profit to redeploy?\"",
-                    "<strong>Demand Hook:</strong> \"Flex industrial vacancy in Northwest Hwy is under 3%. Buyers are paying premiums for this scale.\""
-                ],
-                comps: [
-                    { address: "2100 Randall Rd, Elgin", date: "12 Days Ago", price: "$11,800,000", psf: "$130/SF", cap: "6.0%", match: "96% Match", color: "var(--accent-green)" },
-                    { address: "150 Dunlop Ave, Dundee", date: "3 Mos Ago", price: "$8,900,000", psf: "$122/SF", cap: "6.5%", match: "83% Match", color: "var(--accent-yellow)" }
-                ]
-            },
-            {
-                id: 3,
-                name: "Southlake Commerce Center",
-                address: "7100 S. Joliet Rd, Bolingbrook, IL",
-                owner: "Southlake Realty Trust",
-                submarket: "210,000 SF • Multi-Tenant • I-55 Corridor",
-                propensity: 64,
-                propensityLevel: "med",
-                tenure: "6.1 Yrs",
-                debtMaturity: "18 Mos",
-                typeTag: "high",
-                valRange: "$26.0M - $28.5M",
-                psf: "$124 / SF",
-                origPurchase: "$20.5M (2018)",
-                gain: "Implied Gain: +31%",
-                drivers: [
-                    { label: "High Vacancy Risk", val: "18% Vacant", color: "var(--accent-red)" },
-                    { label: "Hold Period", val: "6.1 Yrs", color: "var(--accent-yellow)" },
-                    { label: "Anchor Lease Expiry", val: "11 Mos", color: "var(--accent-yellow)" }
-                ],
-                contact: {
-                    name: "David Miller",
-                    role: "Asset Manager @ Southlake Realty",
-                    phone: "(630) 555-4920",
-                    hq: "Naperville, IL",
-                    type: "Private Family Office"
+                {
+                    id: 3,
+                    name: "Southlake Commerce Center",
+                    address: "7100 S. Joliet Rd, Bolingbrook, IL",
+                    owner: "Southlake Realty Trust",
+                    submarket: "210,000 SF • Multi-Tenant • I-55 Corridor",
+                    propensity: 64,
+                    propensityLevel: "med",
+                    tenure: "6.1 Yrs",
+                    debtMaturity: "18 Mos",
+                    typeTag: "high",
+                    valRange: "$26.0M - $28.5M",
+                    psf: "$124 / SF",
+                    origPurchase: "$20.5M (2018)",
+                    gain: "Implied Gain: +31%",
+                    drivers: [
+                        { label: "High Vacancy Risk", val: "18% Vacant", color: "var(--accent-red)" },
+                        { label: "Hold Period", val: "6.1 Yrs", color: "var(--accent-yellow)" },
+                        { label: "Anchor Lease Expiry", val: "11 Mos", color: "var(--accent-yellow)" }
+                    ],
+                    contact: {
+                        name: "David Miller",
+                        role: "Asset Manager @ Southlake Realty",
+                        phone: "(630) 555-4920",
+                        hq: "Naperville, IL",
+                        type: "Private Family Office"
+                    },
+                    battlecard: [
+                        "<strong>Value-Add Hook:</strong> \"David, I see the 18% vacancy on Joliet Rd. We have two buyers looking specifically for value-add industrial along I-55 who will take leasing risk off your plate.\""
+                    ],
+                    comps: [
+                        { address: "6500 Veterans Blvd, Bolingbrook", date: "1 Mo Ago", price: "$27,100,000", psf: "$125/SF", cap: "6.2%", match: "91% Match", color: "var(--accent-green)" }
+                    ]
                 },
-                battlecard: [
-                    "<strong>Value-Add Hook:</strong> \"David, I see the 18% vacancy on Joliet Rd. We have two buyers looking specifically for value-add industrial along I-55 who will take leasing risk off your plate.\""
-                ],
-                comps: [
-                    { address: "6500 Veterans Blvd, Bolingbrook", date: "1 Mo Ago", price: "$27,100,000", psf: "$125/SF", cap: "6.2%", match: "91% Match", color: "var(--accent-green)" }
-                ]
-            },
-            {
-                id: 4,
-                name: "Oakton Industrial Plaza",
-                address: "1800 E. Oakton St, Des Plaines, IL",
-                owner: "Des Plaines Holdings LLC",
-                submarket: "45,000 SF • Infill Warehouse • Des Plaines",
-                propensity: 59,
-                propensityLevel: "med",
-                tenure: "14.0 Yrs",
-                debtMaturity: "None (Free & Clear)",
-                typeTag: "high",
-                valRange: "$5.8M - $6.4M",
-                psf: "$132 / SF",
-                origPurchase: "$2.9M (2010)",
-                gain: "Implied Gain: +110%",
-                drivers: [
-                    { label: "Generational Hold", val: "14.0 Yrs", color: "var(--accent-green)" },
-                    { label: "Free & Clear Title", val: "0% Debt", color: "var(--accent-green)" }
-                ],
-                contact: {
-                    name: "Arthur Pendelton",
-                    role: "Owner / Individual Principal",
-                    phone: "(847) 555-3011",
-                    hq: "Des Plaines, IL",
-                    type: "Private Individual"
-                },
-                battlecard: [
-                    "<strong>Estate Hook:</strong> \"Arthur, you've owned Oakton St for 14 years with zero debt. Capital gains tax deferral strategies like 1031s into STNL assets are really appealing for owners looking to retire from management.\""
-                ],
-                comps: [
-                    { address: "1950 Touhy Ave, Des Plaines", date: "2 Mos Ago", price: "$6,200,000", psf: "$135/SF", cap: "5.8%", match: "88% Match", color: "var(--accent-green)" }
-                ]
+                {
+                    id: 4,
+                    name: "Oakton Industrial Plaza",
+                    address: "1800 E. Oakton St, Des Plaines, IL",
+                    owner: "Des Plaines Holdings LLC",
+                    submarket: "45,000 SF • Infill Warehouse • Des Plaines",
+                    propensity: 59,
+                    propensityLevel: "med",
+                    tenure: "14.0 Yrs",
+                    debtMaturity: "None (Free & Clear)",
+                    typeTag: "high",
+                    valRange: "$5.8M - $6.4M",
+                    psf: "$132 / SF",
+                    origPurchase: "$2.9M (2010)",
+                    gain: "Implied Gain: +110%",
+                    drivers: [
+                        { label: "Generational Hold", val: "14.0 Yrs", color: "var(--accent-green)" },
+                        { label: "Free & Clear Title", val: "0% Debt", color: "var(--accent-green)" }
+                    ],
+                    contact: {
+                        name: "Arthur Pendelton",
+                        role: "Owner / Individual Principal",
+                        phone: "(847) 555-3011",
+                        hq: "Des Plaines, IL",
+                        type: "Private Individual"
+                    },
+                    battlecard: [
+                        "<strong>Estate Hook:</strong> \"Arthur, you've owned Oakton St for 14 years with zero debt. Capital gains tax deferral strategies like 1031s into STNL assets are really appealing for owners looking to retire from management.\""
+                    ],
+                    comps: [
+                        { address: "1950 Touhy Ave, Des Plaines", date: "2 Mos Ago", price: "$6,200,000", psf: "$135/SF", cap: "5.8%", match: "88% Match", color: "var(--accent-green)" }
+                    ]
+                }
+            ];
+
+            // State
+            let currentProspectId = 1;
+            let currentFilter = 'all';
+            let isCallActive = false;
+            let callTimerInterval = null;
+            let callSeconds = 0;
+            let completedCallsCount = 42;
+            let pipelineSourced = 14.2;
+
+            // Toast Helper
+            function showToast(message, type = 'info') {
+                const container = document.getElementById('toast-container');
+                if (!container) return;
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                if (type === 'error') {
+                    toast.style.borderLeftColor = 'var(--accent-red)';
+                }
+                toast.innerText = message;
+                container.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
             }
-        ];
 
-        // Active State
-        let currentProspectId = 1;
-        let isCallActive = false;
-        let callTimerInterval = null;
-        let callSeconds = 0;
-        let completedCallsCount = 42;
-        let pipelineSourced = 14.2;
+            // Render Prospect Cards List
+            function renderProspects() {
+                const container = document.getElementById('prospect-list-container');
+                if (!container) return;
+                container.innerHTML = '';
 
-        // Render Functions
-        function renderProspects(filter = 'all') {
-            const container = document.getElementById('prospect-list-container');
-            container.innerHTML = '';
+                const filtered = prospectsData.filter(p => {
+                    if (currentFilter === 'high') return p.propensity >= 80;
+                    if (currentFilter === 'refi') return p.typeTag === 'refi';
+                    return true;
+                });
 
-            const filtered = prospectsData.filter(p => {
-                if (filter === 'high') return p.propensity >= 80;
-                if (filter === 'refi') return p.typeTag === 'refi';
-                return true;
-            });
+                filtered.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = `prospect-card ${p.id === currentProspectId ? 'active' : ''}`;
+                    
+                    card.addEventListener('click', function () {
+                        selectProspect(p.id);
+                    });
 
-            filtered.forEach(p => {
-                const card = document.createElement('div');
-                card.className = `prospect-card ${p.id === currentProspectId ? 'active' : ''}`;
-                card.onclick = () => selectProspect(p.id);
+                    const tagClass = p.propensityLevel === 'high' ? 'tag-high' : 'tag-med';
 
-                const tagClass = p.propensityLevel === 'high' ? 'tag-high' : 'tag-med';
-
-                card.innerHTML = `
-                    <div class="card-top">
-                        <div class="property-name">${p.name}</div>
-                        <div class="propensity-tag ${tagClass}">
-                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                            ${p.propensity}% Propensity
+                    card.innerHTML = `
+                        <div class="card-top">
+                            <div class="property-name">${p.name}</div>
+                            <div class="propensity-tag ${tagClass}">
+                                <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                                ${p.propensity}% Propensity
+                            </div>
                         </div>
-                    </div>
-                    <div class="property-sub">${p.submarket}</div>
-                    <div class="card-signals">
-                        <div class="signal-item"><strong>Tenure:</strong> ${p.tenure}</div>
-                        <div class="signal-item"><strong>Debt Maturity:</strong> ${p.debtMaturity}</div>
-                    </div>
-                `;
-                container.appendChild(card);
+                        <div class="property-sub">${p.submarket}</div>
+                        <div class="card-signals">
+                            <div class="signal-item"><strong>Tenure:</strong> ${p.tenure}</div>
+                            <div class="signal-item"><strong>Debt Maturity:</strong> ${p.debtMaturity}</div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // Select a prospect and update all details
+            function selectProspect(id) {
+                if (isCallActive) {
+                    showToast("Please end the current call before switching prospects.", "error");
+                    return;
+                }
+
+                currentProspectId = id;
+                renderProspects();
+
+                const p = prospectsData.find(item => item.id === id);
+                if (!p) return;
+
+                // Column 2 Details Update
+                document.getElementById('prop-title').innerText = p.name;
+                document.getElementById('prop-address').innerText = `${p.address} • Owned by ${p.owner}`;
+                document.getElementById('score-value').innerText = p.propensity;
+                
+                const scoreCircle = document.getElementById('score-circle-bg');
+                const scoreColor = p.propensity >= 80 ? 'var(--accent-green)' : 'var(--accent-yellow)';
+                scoreCircle.style.background = `conic-gradient(${scoreColor} 0% ${p.propensity}%, var(--bg-surface-elevated) ${p.propensity}% 100%)`;
+
+                const probLabel = document.getElementById('prop-prob-label');
+                probLabel.innerText = p.propensity >= 80 ? 'High Transaction Probability' : 'Moderate Transaction Probability';
+                probLabel.style.color = scoreColor;
+
+                document.getElementById('prop-val-range').innerText = p.valRange;
+                document.getElementById('prop-psf').innerText = p.psf;
+                document.getElementById('prop-orig-purchase').innerText = p.origPurchase;
+                document.getElementById('prop-gain').innerText = p.gain;
+
+                // Drivers
+                const driverContainer = document.getElementById('driver-list-container');
+                driverContainer.innerHTML = '';
+                p.drivers.forEach(d => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span><span class="dot" style="background:${d.color}"></span>${d.label}</span>
+                        <strong style="color:var(--text-main)">${d.val}</strong>
+                    `;
+                    driverContainer.appendChild(li);
+                });
+
+                // Comps Table
+                const compsContainer = document.getElementById('comps-table-body');
+                compsContainer.innerHTML = '';
+                p.comps.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="highlight">${c.address}</td>
+                        <td>${c.date}</td>
+                        <td>${c.price}</td>
+                        <td>${c.psf}</td>
+                        <td>${c.cap}</td>
+                        <td><span style="color:${c.color}; font-weight:600;">${c.match}</span></td>
+                    `;
+                    compsContainer.appendChild(tr);
+                });
+
+                // Column 3 Contact Info
+                document.getElementById('contact-name').innerText = p.contact.name;
+                document.getElementById('contact-role').innerText = p.contact.role;
+                document.getElementById('contact-phone').innerText = p.contact.phone;
+                document.getElementById('contact-hq').innerText = p.contact.hq;
+                document.getElementById('contact-type').innerText = p.contact.type;
+
+                // Battlecard
+                const battleContainer = document.getElementById('battlecard-content');
+                battleContainer.innerHTML = '';
+                p.battlecard.forEach(b => {
+                    const div = document.createElement('div');
+                    div.className = 'talking-point';
+                    div.innerHTML = b;
+                    battleContainer.appendChild(div);
+                });
+
+                showToast(`Loaded analytics for ${p.name}`);
+            }
+
+            // Dial / End Call Trigger
+            document.getElementById('dial-btn').addEventListener('click', function () {
+                const btn = document.getElementById('dial-btn');
+                const btnText = document.getElementById('dial-btn-text');
+                const statusText = document.getElementById('dialer-status-text');
+                const statusDot = document.getElementById('status-dot');
+                const timerDisplay = document.getElementById('call-timer-display');
+
+                if (!isCallActive) {
+                    isCallActive = true;
+                    btn.className = 'btn btn-end';
+                    btnText.innerText = 'End Call';
+                    statusText.innerText = 'Call in Progress';
+                    statusText.style.color = 'var(--accent-red)';
+                    statusDot.className = 'status-dot active-call';
+                    timerDisplay.style.display = 'block';
+
+                    callSeconds = 0;
+                    callTimerInterval = setInterval(() => {
+                        callSeconds++;
+                        const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+                        const secs = String(callSeconds % 60).padStart(2, '0');
+                        timerDisplay.innerText = `IN CALL — ${mins}:${secs}`;
+                    }, 1000);
+
+                    const currentContact = prospectsData.find(p => p.id === currentProspectId).contact.name;
+                    showToast(`Dialing ${currentContact}...`);
+                } else {
+                    isCallActive = false;
+                    clearInterval(callTimerInterval);
+                    btn.className = 'btn btn-call';
+                    btnText.innerText = 'Dial Contact Now';
+                    statusText.innerText = 'Line Ready';
+                    statusText.style.color = 'var(--accent-green)';
+                    statusDot.className = 'status-dot';
+                    timerDisplay.style.display = 'none';
+
+                    showToast(`Call ended (${callSeconds}s). Log disposition below.`);
+                }
             });
-        }
 
-        function selectProspect(id) {
-            if (isCallActive) {
-                showToast("Please end the current call before switching prospects.", "error");
-                return;
-            }
+            // Activity Log
+            document.getElementById('log-activity-btn').addEventListener('click', function () {
+                const select = document.getElementById('disposition-select');
+                const notes = document.getElementById('disposition-notes');
 
-            currentProspectId = id;
-            renderProspects();
+                if (!select.value) {
+                    showToast("Please select a disposition outcome.", "error");
+                    return;
+                }
 
-            const p = prospectsData.find(item => item.id === id);
-            if (!p) return;
+                completedCallsCount++;
+                document.getElementById('daily-calls-val').innerText = `${completedCallsCount} / 60`;
 
-            // Update Column 2 Details
-            document.getElementById('prop-title').innerText = p.name;
-            document.getElementById('prop-address').innerText = `${p.address} • Owned by ${p.owner}`;
-            document.getElementById('score-value').innerText = p.propensity;
-            
-            // Dynamic score ring gradient
-            const scoreCircle = document.getElementById('score-circle-bg');
-            const scoreColor = p.propensity >= 80 ? 'var(--accent-green)' : 'var(--accent-yellow)';
-            scoreCircle.style.background = `conic-gradient(${scoreColor} 0% ${p.propensity}%, var(--bg-surface-elevated) ${p.propensity}% 100%)`;
+                if (select.value === 'connected' || select.value === 'followup') {
+                    pipelineSourced += 1.5;
+                    document.getElementById('pipeline-val').innerText = `$${pipelineSourced.toFixed(1)}M`;
+                }
 
-            document.getElementById('prop-prob-label').innerText = p.propensity >= 80 ? 'High Transaction Probability' : 'Moderate Transaction Probability';
-            document.getElementById('prop-prob-label').style.color = scoreColor;
+                showToast("Call activity logged and CRM updated!");
 
-            document.getElementById('prop-val-range').innerText = p.valRange;
-            document.getElementById('prop-psf').innerText = p.psf;
-            document.getElementById('prop-orig-purchase').innerText = p.origPurchase;
-            document.getElementById('prop-gain').innerText = p.gain;
+                select.value = '';
+                notes.value = '';
 
-            // Render Drivers
-            const driverContainer = document.getElementById('driver-list-container');
-            driverContainer.innerHTML = '';
-            p.drivers.forEach(d => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span><span class="dot" style="background:${d.color}"></span>${d.label}</span>
-                    <strong style="color:var(--text-main)">${d.val}</strong>
-                `;
-                driverContainer.appendChild(li);
+                if (currentProspectId < prospectsData.length) {
+                    selectProspect(currentProspectId + 1);
+                }
             });
 
-            // Render Comps Table
-            const compsContainer = document.getElementById('comps-table-body');
-            compsContainer.innerHTML = '';
-            p.comps.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="highlight">${c.address}</td>
-                    <td>${c.date}</td>
-                    <td>${c.price}</td>
-                    <td>${c.psf}</td>
-                    <td>${c.cap}</td>
-                    <td><span style="color:${c.color}; font-weight:600;">${c.match}</span></td>
-                `;
-                compsContainer.appendChild(tr);
+            // Filters
+            function applyFilter(filterType, chipElement) {
+                currentFilter = filterType;
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chipElement.classList.add('active');
+                renderProspects();
+            }
+
+            document.getElementById('filter-all').addEventListener('click', function () {
+                applyFilter('all', this);
+            });
+            document.getElementById('filter-high').addEventListener('click', function () {
+                applyFilter('high', this);
+            });
+            document.getElementById('filter-refi').addEventListener('click', function () {
+                applyFilter('refi', this);
+            });
+            document.getElementById('reset-filters-btn').addEventListener('click', function () {
+                applyFilter('all', document.getElementById('filter-all'));
             });
 
-            // Update Column 3 Contact Info
-            document.getElementById('contact-name').innerText = p.contact.name;
-            document.getElementById('contact-role').innerText = p.contact.role;
-            document.getElementById('contact-phone').innerText = p.contact.phone;
-            document.getElementById('contact-hq').innerText = p.contact.hq;
-            document.getElementById('contact-type').innerText = p.contact.type;
-
-            // Render Battlecard
-            const battleContainer = document.getElementById('battlecard-content');
-            battleContainer.innerHTML = '';
-            p.battlecard.forEach(b => {
-                const div = document.createElement('div');
-                div.className = 'talking-point';
-                div.innerHTML = b;
-                battleContainer.appendChild(div);
+            // Nav Items
+            document.querySelectorAll('.sidebar .nav-item').forEach((item, index) => {
+                item.addEventListener('click', function () {
+                    document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    showToast(`Switched workspace view`);
+                });
             });
 
-            showToast(`Loaded analytics for ${p.name}`);
-        }
+            // Modal Triggering
+            document.getElementById('open-map-btn').addEventListener('click', function () {
+                const p = prospectsData.find(item => item.id === currentProspectId);
+                document.getElementById('modal-title').innerText = `GIS Parcel Overlay: ${p.name}`;
+                document.getElementById('modal-body').innerText = `Displaying tax parcel assessment boundaries, footprint zoning (M-1), and satellite imaging for ${p.address}. Owner of record: ${p.owner}.`;
+                
+                const overlay = document.getElementById('modal-overlay');
+                overlay.classList.add('active');
+            });
 
-        // Interactive Dialing Controls
-        function toggleCall() {
-            const btn = document.getElementById('dial-btn');
-            const btnText = document.getElementById('dial-btn-text');
-            const statusText = document.getElementById('dialer-status-text');
-            const statusDot = document.getElementById('status-dot');
-            const timerDisplay = document.getElementById('call-timer-display');
+            document.getElementById('close-modal-btn').addEventListener('click', function () {
+                const overlay = document.getElementById('modal-overlay');
+                overlay.classList.remove('active');
+            });
 
-            if (!isCallActive) {
-                // Start Call
-                isCallActive = true;
-                btn.className = 'btn btn-end';
-                btnText.innerText = 'End Call';
-                statusText.innerText = 'Call in Progress';
-                statusText.style.color = 'var(--accent-red)';
-                statusDot.className = 'status-dot active-call';
-                timerDisplay.style.display = 'block';
-
-                callSeconds = 0;
-                callTimerInterval = setInterval(() => {
-                    callSeconds++;
-                    const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
-                    const secs = String(callSeconds % 60).padStart(2, '0');
-                    timerDisplay.innerText = `IN CALL — ${mins}:${secs}`;
-                }, 1000);
-
-                const currentContact = prospectsData.find(p => p.id === currentProspectId).contact.name;
-                showToast(`Dialing ${currentContact}...`);
-            } else {
-                // End Call
-                isCallActive = false;
-                clearInterval(callTimerInterval);
-                btn.className = 'btn btn-call';
-                btnText.innerText = 'Dial Contact Now';
-                statusText.innerText = 'Line Ready';
-                statusText.style.color = 'var(--accent-green)';
-                statusDot.className = 'status-dot';
-                timerDisplay.style.display = 'none';
-
-                showToast(`Call ended (${callSeconds} seconds). Log disposition below.`);
-            }
-        }
-
-        // Activity Logging
-        function logActivity() {
-            const select = document.getElementById('disposition-select');
-            const notes = document.getElementById('disposition-notes');
-
-            if (!select.value) {
-                showToast("Please select a disposition outcome.", "error");
-                return;
-            }
-
-            completedCallsCount++;
-            document.getElementById('daily-calls-val').innerText = `${completedCallsCount} / 60`;
-
-            if (select.value === 'connected' || select.value === 'followup') {
-                pipelineSourced += 1.5;
-                document.getElementById('pipeline-val').innerText = `$${pipelineSourced.toFixed(1)}M`;
-            }
-
-            showToast("Call activity logged and CRM updated!");
-
-            // Reset form
-            select.value = '';
-            notes.value = '';
-
-            // Auto-advance to next lead if available
-            if (currentProspectId < prospectsData.length) {
-                selectProspect(currentProspectId + 1);
-            }
-        }
-
-        // Navigation Tabs Interaction
-        function switchTab(element, name) {
-            document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-            showToast(`Switched to ${name}`);
-        }
-
-        // Filtering
-        function filterProspects(chip, filterType) {
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            renderProspects(filterType);
-        }
-
-        function clearFilters() {
-            const firstChip = document.querySelectorAll('.filter-chip')[0];
-            filterProspects(firstChip, 'all');
-        }
-
-        // Modal Controls
-        function openMapModal() {
-            const p = prospectsData.find(item => item.id === currentProspectId);
-            document.getElementById('modal-title').innerText = `GIS Parcel Overlay: ${p.name}`;
-            document.getElementById('modal-body').innerText = `Displaying tax parcel assessment boundaries, footprint zoning (M-1), and satellite imaging for ${p.address}. Owner of record: ${p.owner}.`;
-            document.getElementById('modal-overlay').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('modal-overlay').style.display = 'none';
-        }
-
-        // Toast Notification System
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            if (type === 'error') {
-                toast.style.borderLeftColor = 'var(--accent-red)';
-            }
-            toast.innerText = message;
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        // Initialize App
-        window.onload = () => {
+            // Initial Execution
             renderProspects();
             selectProspect(1);
-        };
+
+        });
     </script>
 </body>
 </html>

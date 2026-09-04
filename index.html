@@ -3,1362 +3,1138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROPEL CRE | Predictive Prospecting & Cold Calling Platform</title>
+    <title>CapRate AI | Predictive CRE Prospecting & Cold-Calling CRM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #0B0E14;
-            --bg-surface: #121824;
-            --bg-surface-elevated: #1A2232;
-            --bg-hover: #222C3E;
-            
-            --border-subtle: #1E293B;
-            --border-strong: #334155;
-            
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --text-dark: #64748B;
-            
-            --accent-green: #10B981;
-            --accent-green-glow: rgba(16, 185, 129, 0.15);
-            --accent-yellow: #F59E0B;
-            --accent-yellow-glow: rgba(245, 158, 11, 0.15);
-            --accent-red: #EF4444;
-            --accent-blue: #3B82F6;
-            --accent-blue-glow: rgba(59, 130, 246, 0.15);
-            --accent-purple: #8B5CF6;
-
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --bg-main: #FAFAFA;
+            --surface: #FFFFFF;
+            --border: #E5E7EB;
+            --border-hover: #D1D5DB;
+            --text-primary: #111827;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --accent-red: #DC2626;
+            --accent-red-hover: #B91C1C;
+            --accent-red-light: #FEF2F2;
+            --status-warm-bg: #FFFBEE;
+            --status-warm-text: #B45309;
+            --status-cold-bg: #F3F4F6;
+            --status-cold-text: #4B5563;
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            font-size: 13px;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Top Header */
+        /* Layout */
         header {
-            height: 56px;
-            background-color: var(--bg-surface);
-            border-bottom: 1px solid var(--border-subtle);
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
         }
 
-        .brand {
+        .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0.5rem;
             font-weight: 700;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            color: var(--text-main);
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.025em;
         }
 
-        .brand-logo {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 6px;
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background-color: var(--accent-red);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            font-size: 14px;
-            color: #fff;
-        }
-
-        .header-metrics {
-            display: flex;
-            gap: 24px;
-        }
-
-        .metric-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-surface-elevated);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--border-subtle);
-            font-size: 12px;
-        }
-
-        .metric-pill .val {
+            color: white;
             font-weight: 700;
-            color: var(--accent-green);
+            font-size: 0.875rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-red);
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-left: 1px solid var(--border);
+            padding-left: 1.5rem;
         }
 
         .avatar {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background-color: var(--accent-purple);
+            background-color: #E5E7EB;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 12px;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Banner */
+        .system-banner {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-red);
+            border-radius: var(--radius-md);
+            padding: 0.875rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .banner-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .banner-tag {
+            background-color: var(--accent-red-light);
+            color: var(--accent-red);
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+        }
+
+        /* Metrics Bar */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
+        }
+
+        .metric-sub {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .text-accent {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        /* Filter Controls */
+        .controls-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-bar-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-red);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        select, input[type="text"] {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background-color: var(--surface);
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: var(--accent-red);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-red-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--border-hover);
+            background-color: var(--bg-main);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
         }
 
         /* Workspace Layout */
         .workspace {
-            display: flex;
-            flex: 1;
-            height: calc(100vh - 56px);
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Table View */
+        .table-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            position: relative;
-            z-index: 1;
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Sidebar Navigation */
-        nav.sidebar {
-            width: 64px;
-            background-color: var(--bg-surface);
-            border-right: 1px solid var(--border-subtle);
+        .table-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            gap: 20px;
-            position: relative;
-            z-index: 2;
+            background-color: var(--surface);
         }
 
-        .nav-item {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            z-index: 3;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background-color: var(--bg-surface-elevated);
-            color: var(--accent-blue);
-        }
-
-        .nav-item.active {
-            border-left: 3px solid var(--accent-blue);
-            border-radius: 2px 8px 8px 2px;
-        }
-
-        /* Column 1: Pipeline Prospecting List */
-        .panel-pipeline {
-            width: 420px;
-            border-right: 1px solid var(--border-subtle);
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-base);
-            position: relative;
-            z-index: 2;
-        }
-
-        .panel-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-subtle);
-            background-color: var(--bg-surface);
-        }
-
-        .panel-title {
-            font-size: 14px;
+        .table-title {
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .filter-bar {
-            display: flex;
-            gap: 8px;
-        }
-
-        .filter-chip {
-            padding: 4px 10px;
-            border-radius: 4px;
-            background: var(--bg-surface-elevated);
-            border: 1px solid var(--border-subtle);
+        .table-count {
+            font-size: 0.75rem;
             color: var(--text-muted);
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: 500;
-            user-select: none;
-            transition: all 0.15s;
-            position: relative;
-            z-index: 3;
+            font-weight: 400;
         }
 
-        .filter-chip.active {
-            background: var(--accent-blue-glow);
-            color: var(--accent-blue);
-            border-color: var(--accent-blue);
-        }
-
-        .prospect-list {
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .prospect-card {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border-subtle);
-            cursor: pointer;
-            transition: background 0.15s;
-            position: relative;
-            z-index: 3;
-        }
-
-        .prospect-card:hover {
-            background-color: var(--bg-surface);
-        }
-
-        .prospect-card.active {
-            background-color: var(--bg-surface-elevated);
-            border-left: 4px solid var(--accent-blue);
-        }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 6px;
-        }
-
-        .property-name {
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text-main);
-        }
-
-        .property-sub {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .propensity-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .tag-high {
-            background: var(--accent-green-glow);
-            color: var(--accent-green);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .tag-med {
-            background: var(--accent-yellow-glow);
-            color: var(--accent-yellow);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .card-signals {
-            display: flex;
-            gap: 12px;
-            font-size: 11px;
-            color: var(--text-dark);
-            margin-top: 8px;
-        }
-
-        .signal-item strong {
-            color: var(--text-muted);
-        }
-
-        /* Column 2: Deep Analytics & Property View */
-        .panel-analytics {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            background-color: var(--bg-base);
-            border-right: 1px solid var(--border-subtle);
-            position: relative;
-            z-index: 2;
-        }
-
-        .analytics-header {
-            padding: 20px;
-            background-color: var(--bg-surface);
-            border-bottom: 1px solid var(--border-subtle);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .analytics-title h2 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .analytics-title p {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-top: 2px;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            padding: 20px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            padding: 0 20px 20px 20px;
-        }
-
-        .card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 16px;
-        }
-
-        .card-header-sm {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* Predictive Score Display */
-        .score-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .score-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: conic-gradient(var(--accent-green) 0% 88%, var(--bg-surface-elevated) 88% 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            transition: background 0.3s;
-        }
-
-        .score-circle::before {
-            content: '';
-            position: absolute;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background-color: var(--bg-surface);
-        }
-
-        .score-val {
-            position: relative;
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        .driver-list {
-            list-style: none;
-            flex: 1;
-        }
-
-        .driver-list li {
-            font-size: 12px;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .driver-list .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
-        }
-
-        /* Comps Table */
-        .table-comps {
+        table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 12px;
+            font-size: 0.875rem;
         }
 
-        .table-comps th {
-            color: var(--text-dark);
-            padding: 8px;
-            border-bottom: 1px solid var(--border-subtle);
-            font-weight: 500;
+        th {
+            background-color: var(--bg-main);
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
         }
 
-        .table-comps td {
-            padding: 10px 8px;
-            border-bottom: 1px solid var(--border-subtle);
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr.lead-row {
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        tr.lead-row:hover {
+            background-color: #F9FAFB;
+        }
+
+        tr.lead-row.selected {
+            background-color: var(--accent-red-light);
+        }
+
+        /* Badges & Scores */
+        .score-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: var(--radius-sm);
+            width: 52px;
+        }
+
+        .score-hot {
+            background-color: var(--accent-red-light);
+            color: var(--accent-red);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .score-warm {
+            background-color: var(--status-warm-bg);
+            color: var(--status-warm-text);
+            border: 1px solid rgba(180, 83, 9, 0.2);
+        }
+
+        .score-cold {
+            background-color: var(--status-cold-bg);
+            color: var(--status-cold-text);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+        }
+
+        .property-cell {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prop-address {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .prop-sub {
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
-        .table-comps tr:last-child td {
-            border-bottom: none;
+        .badge {
+            display: inline-block;
+            padding: 0.125rem 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-main);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
         }
 
-        .table-comps td.highlight {
-            color: var(--text-main);
-            font-weight: 600;
+        /* Detail Panel */
+        .detail-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
         }
 
-        /* Column 3: Cold Calling Power Command Center */
-        .panel-dialer {
-            width: 380px;
-            background-color: var(--bg-surface);
+        .panel-header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .panel-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .panel-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .signal-list {
+            list-style: none;
             display: flex;
             flex-direction: column;
-            position: relative;
-            z-index: 2;
+            gap: 0.5rem;
         }
 
-        .dialer-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-subtle);
-            font-weight: 600;
+        .signal-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            background-color: var(--bg-main);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            font-size: 0.8125rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .info-val {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Call Logger Module */
+        .call-log-box {
+            margin-top: 1.25rem;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .textarea-sm {
+            width: 100%;
+            height: 70px;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            margin-bottom: 0.75rem;
+            resize: none;
+            outline: none;
+        }
+
+        .textarea-sm:focus {
+            border-color: var(--accent-red);
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .history-list {
+            margin-top: 0.75rem;
+            max-height: 140px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .history-item {
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+        }
+
+        .history-meta {
+            color: var(--text-muted);
+            font-size: 0.6875rem;
+            margin-bottom: 0.25rem;
+            display: flex;
             justify-content: space-between;
         }
 
-        .status-badge {
-            font-size: 11px;
-            font-weight: normal;
-            color: var(--accent-green);
+        /* Helper Classes */
+        .flex-between {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 4px;
         }
 
-        .status-dot {
+        .confidence-flag {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .confidence-dot {
             width: 6px;
             height: 6px;
-            background: var(--accent-green);
             border-radius: 50%;
+            background-color: #10B981;
         }
 
-        .status-dot.active-call {
-            background: var(--accent-red);
-            animation: pulse 1s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { opacity: 1; }
-            to { opacity: 0.3; }
-        }
-
-        .contact-card {
-            padding: 16px;
-            background: var(--bg-surface-elevated);
-            margin: 16px;
-            border-radius: 8px;
-            border: 1px solid var(--border-subtle);
-        }
-
-        .contact-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .contact-role {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .contact-detail {
-            font-size: 12px;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .dialer-controls {
-            padding: 0 16px 16px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: none;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-            user-select: none;
-            position: relative;
-            z-index: 5;
-        }
-
-        .btn:hover {
-            filter: brightness(1.1);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-call {
-            background-color: var(--accent-green);
-            color: #000;
-        }
-
-        .btn-end {
-            background-color: var(--accent-red);
-            color: #fff;
-        }
-
-        .btn-secondary {
-            background-color: var(--bg-surface-elevated);
-            color: var(--text-main);
-            border: 1px solid var(--border-strong);
-        }
-
-        /* Call Timer Overlay */
-        .call-timer {
-            display: none;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--accent-red);
-            color: var(--accent-red);
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        /* Battlecard / Talking Points */
-        .battlecard {
-            margin: 0 16px;
-            background: rgba(59, 130, 246, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 12px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .battlecard-title {
-            color: var(--accent-blue);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .talking-point {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            padding-left: 10px;
-            border-left: 2px solid var(--accent-blue);
-        }
-
-        /* Disposition Form */
-        .disposition-area {
-            padding: 16px;
-            border-top: 1px solid var(--border-subtle);
-            background-color: var(--bg-surface);
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-dark);
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        select, textarea {
-            width: 100%;
-            background: var(--bg-base);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-main);
-            padding: 8px;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 12px;
-            outline: none;
-            position: relative;
-            z-index: 5;
-        }
-
-        select:focus, textarea:focus {
-            border-color: var(--accent-blue);
-        }
-
-        textarea {
-            resize: none;
-            height: 50px;
-        }
-
-        .icon {
-            width: 16px;
-            height: 16px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            pointer-events: none;
-        }
-
-        /* Modal Dialog - STRICTLY HIDDEN UNLESS ACTIVE */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.7);
-            z-index: -1;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            z-index: 9999;
-            pointer-events: auto;
-        }
-
-        .modal {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-strong);
-            border-radius: 8px;
-            width: 400px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        .modal-title {
-            font-weight: 700;
-            font-size: 15px;
-            margin-bottom: 8px;
-        }
-
-        .modal-body {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-
-        /* Toast Notifications Container */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 10000;
-            pointer-events: none;
+        .confidence-dot.low {
+            background-color: #F59E0B;
         }
 
         .toast {
-            background: var(--bg-surface-elevated);
-            border-left: 4px solid var(--accent-green);
-            color: var(--text-main);
-            padding: 12px 16px;
-            border-radius: 4px;
-            font-size: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            animation: slideIn 0.2s forwards;
-            pointer-events: auto;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--text-primary);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">
-            <div class="brand-logo">P</div>
-            PROPEL CRE
-        </div>
-
-        <div class="header-metrics">
-            <div class="metric-pill">
-                <span>Daily Calls:</span>
-                <span class="val" id="daily-calls-val">42 / 60</span>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">C</span>
+                CapRate AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Prospecting Pipeline</a></li>
+                <li><a href="#">Market Comps</a></li>
+                <li><a href="#">Calling Lists</a></li>
+                <li><a href="#">Model Diagnostics</a></li>
+            </ul>
+            <div class="user-profile">
+                <span>Marcus Vance (Senior CRE Broker)</span>
+                <div class="avatar">MV</div>
             </div>
-            <div class="metric-pill">
-                <span>Connect Rate:</span>
-                <span class="val">28%</span>
-            </div>
-            <div class="metric-pill">
-                <span>Pipeline Sourced:</span>
-                <span class="val" id="pipeline-val">$14.2M</span>
-            </div>
-        </div>
-
-        <div class="user-profile">
-            <span style="font-size:12px; font-weight:500;">Austin (Industrial Team)</span>
-            <div class="avatar">AM</div>
         </div>
     </header>
 
-    <div class="workspace">
+    <main>
+        <div class="system-banner">
+            <div class="banner-text">
+                <span class="banner-tag">Model Active</span>
+                <span>Batch Scored: <strong>Today, 06:00 AM PST</strong> | Model Version: <strong>v4.2-cre</strong> (Public Record Audit Passed & Fair-Housing Verified)</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="showToast('Model audit logs: Zero proxy variables detected.')">View Compliance Log</button>
+        </div>
 
-        <nav class="sidebar">
-            <div class="nav-item active" id="nav-1" title="Predictive Prospecting">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">High-Probability Leads</div>
+                <div class="metric-value">42</div>
+                <div class="metric-sub"><span class="text-accent">Score 80+</span> (Transact in &lt;12 mos)</div>
             </div>
-            <div class="nav-item" id="nav-2" title="Cadences / Cold Calling">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div class="metric-card">
+                <div class="metric-label">Avg Loan Maturity Window</div>
+                <div class="metric-value">8.4 mos</div>
+                <div class="metric-sub">Across flagged portfolio</div>
             </div>
-            <div class="nav-item" id="nav-3" title="Market Comps & Analytics">
-                <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <div class="metric-card">
+                <div class="metric-label">Pipeline Deal Volume</div>
+                <div class="metric-value">$148.5M</div>
+                <div class="metric-sub">Estimated gross asset value</div>
             </div>
-            <div class="nav-item" id="nav-4" title="Saved Databases">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"/><line x1="4" y1="10" x2="20" y2="10"/></svg>
+            <div class="metric-card">
+                <div class="metric-label">Model Predictive Lift</div>
+                <div class="metric-value">3.2x</div>
+                <div class="metric-sub">vs. standard tenure heuristics</div>
             </div>
-        </nav>
+        </div>
 
-        <section class="panel-pipeline">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <span>Ranked Prospects</span>
-                    <span id="reset-filters-btn" style="font-size: 11px; color: var(--accent-blue); cursor: pointer;">Reset Filters</span>
+        <div class="controls-card">
+            <div class="search-bar-row">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search by Owner Name, Property Address, Parcel ID, or LLC..." onkeyup="filterLeads()">
                 </div>
-                <div class="filter-bar">
-                    <div class="filter-chip active" id="filter-all">All Ranked</div>
-                    <div class="filter-chip" id="filter-high">High Score</div>
-                    <div class="filter-chip" id="filter-refi">Refinance Due</div>
-                </div>
-            </div>
-
-            <div class="prospect-list" id="prospect-list-container">
-                </div>
-        </section>
-
-        <section class="panel-analytics">
-            <div class="analytics-header">
-                <div class="analytics-title">
-                    <h2 id="prop-title">Midwest Logistics Hub</h2>
-                    <p id="prop-address">10400 W. Higgins Rd, Rosemont, IL • Owned by Apex Midwest Holdings LLC</p>
-                </div>
-                <button class="btn btn-secondary" id="open-map-btn" style="width:auto; padding:6px 12px; font-size:11px;">
-                    View Parcel Map
+                <button class="btn btn-primary" onclick="triggerCallSequence()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    Start Power Dialer
                 </button>
             </div>
-
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-header-sm">
-                        <span>Sell Propensity Breakdown</span>
-                        <span id="prop-prob-label" style="color:var(--accent-green)">High Transaction Probability</span>
-                    </div>
-                    <div class="score-container">
-                        <div class="score-circle" id="score-circle-bg">
-                            <div class="score-val" id="score-value">88</div>
-                        </div>
-                        <ul class="driver-list" id="driver-list-container">
-                            </ul>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header-sm">Ownership & Valuation Profile</div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:6px;">
-                        <div>
-                            <div style="font-size:11px; color:var(--text-dark);">Est. Value Range</div>
-                            <div style="font-size:16px; font-weight:700; color:var(--text-main); margin-top:2px;" id="prop-val-range">$18.5M - $20.2M</div>
-                            <div style="font-size:11px; color:var(--accent-green); margin-top:2px;" id="prop-psf">$134 / SF</div>
-                        </div>
-                        <div>
-                            <div style="font-size:11px; color:var(--text-dark);">Original Purchase</div>
-                            <div style="font-size:14px; font-weight:600; color:var(--text-main); margin-top:2px;" id="prop-orig-purchase">$12.1M (2017)</div>
-                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="prop-gain">Implied Gain: +57%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-3" style="grid-column: span 2;">
-                <div class="card" style="grid-column: span 3;">
-                    <div class="card-header-sm">
-                        <span>Predictive Pattern Matching: Relevant Submarket Comps</span>
-                        <span style="color:var(--accent-blue);">Market Matched Deals</span>
-                    </div>
-                    <table class="table-comps">
-                        <thead>
-                            <tr>
-                                <th>Property Address</th>
-                                <th>Sale Date</th>
-                                <th>Sale Price</th>
-                                <th>$/SF</th>
-                                <th>Cap Rate</th>
-                                <th>Similarity Index</th>
-                            </tr>
-                        </thead>
-                        <tbody id="comps-table-body">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <section class="panel-dialer">
-            <div class="dialer-header">
-                <span>Power Prospector</span>
-                <span class="status-badge" id="dialer-status-badge">
-                    <span class="status-dot" id="status-dot"></span>
-                    <span id="dialer-status-text">Line Ready</span>
-                </span>
-            </div>
-
-            <div class="contact-card">
-                <div class="contact-name" id="contact-name">Robert Vance</div>
-                <div class="contact-role" id="contact-role">Managing Principal @ Apex Midwest Holdings</div>
-                <div class="contact-detail">
-                    <span style="color:var(--text-dark)">Direct Phone:</span>
-                    <span style="font-weight:600; color:var(--text-main);" id="contact-phone">(312) 555-0194</span>
-                </div>
-                <div class="contact-detail">
-                    <span style="color:var(--text-dark)">HQ Location:</span>
-                    <span style="color:var(--text-muted)" id="contact-hq">Chicago, IL</span>
-                </div>
-                <div class="contact-detail">
-                    <span style="color:var(--text-dark)">Ownership Type:</span>
-                    <span style="color:var(--text-muted)" id="contact-type">Private Equity (Regional)</span>
-                </div>
-            </div>
-
-            <div class="dialer-controls">
-                <div class="call-timer" id="call-timer-display">IN CALL — 00:00</div>
-                <button class="btn btn-call" id="dial-btn">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    <span id="dial-btn-text">Dial Contact Now</span>
-                </button>
-            </div>
-
-            <div class="battlecard">
-                <div class="battlecard-title">
-                    <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    AI Context & Hook Generator
-                </div>
-                <div id="battlecard-content">
-                    </div>
-            </div>
-
-            <div class="disposition-area">
-                <div class="form-group">
-                    <label>Call Outcome / Disposition</label>
-                    <select id="disposition-select">
-                        <option value="">Select Outcome...</option>
-                        <option value="connected">Connected - Corrective Pitch Made</option>
-                        <option value="followup">Follow Up Requested (Send OM)</option>
-                        <option value="vm">Left Voicemail</option>
-                        <option value="not_interested">Not Interested / Holding Long Term</option>
-                        <option value="wrong_number">Wrong Number / Outdated Contact</option>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <span class="filter-label">Filters:</span>
+                    <select id="assetTypeFilter" onchange="filterLeads()">
+                        <option value="ALL">All Asset Types</option>
+                        <option value="Industrial">Industrial / Logistics</option>
+                        <option value="Multi-Family">Multi-Family</option>
+                        <option value="Office">Office</option>
+                        <option value="Retail">Retail</option>
+                    </select>
+                    <select id="scoreTierFilter" onchange="filterLeads()">
+                        <option value="ALL">All Propensity Tiers</option>
+                        <option value="Hot">Hot (Score 80-100)</option>
+                        <option value="Warm">Warm (Score 50-79)</option>
+                        <option value="Cold">Cold (Score &lt;50)</option>
+                    </select>
+                    <select id="ownerTypeFilter" onchange="filterLeads()">
+                        <option value="ALL">All Owner Types</option>
+                        <option value="LLC">LLC / Corporate</option>
+                        <option value="Private Individual">Private Individual</option>
+                        <option value="Institutional">Institutional REIT</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Call Notes / Context</label>
-                    <textarea id="disposition-notes" placeholder="e.g. Owner expressed interest in 1031 exchange options..."></textarea>
+                <div class="filter-group">
+                    <button class="btn btn-outline btn-sm" onclick="resetFilters()">Reset Filters</button>
                 </div>
-                <button class="btn btn-secondary" id="log-activity-btn">
-                    Log Activity & Advance Pipeline
-                </button>
             </div>
-        </section>
-
-    </div>
-
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal">
-            <div class="modal-title" id="modal-title">GIS Parcel Overlay</div>
-            <div class="modal-body" id="modal-body">
-                Loading GIS boundary data and satellite overlays for property...
-            </div>
-            <button class="btn btn-secondary" id="close-modal-btn">Close Window</button>
         </div>
-    </div>
 
-    <div class="toast-container" id="toast-container"></div>
+        <div class="workspace">
+            <div class="table-container">
+                <div class="table-header">
+                    <div>
+                        <span class="table-title">Prioritized Prospect List</span>
+                        <span class="table-count" id="recordCount">(Showing 5 of 5 properties)</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">
+                        Sorted by: <strong>Predictive Propensity Score (Descending)</strong>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Propensity</th>
+                            <th>Property & Location</th>
+                            <th>Asset Class</th>
+                            <th>Owner Entity</th>
+                            <th>Tenure</th>
+                            <th>Est. Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadTableBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="detail-panel" id="detailPanel">
+                </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">Action logged successfully.</div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // Mock Lead Data compliant with CRE spec (5-10 yr depth, public sources, predictive features)
+        const leadsData = [
+            {
+                id: 1,
+                address: "1040 S Millcreek Rd",
+                subtext: "Industrial Park, Parcel #44-092-11",
+                assetClass: "Industrial",
+                owner: "Millcreek Logistics Holdings LLC",
+                ownerType: "LLC",
+                contactName: "Arthur Pendelton (Managing Member)",
+                phone: "(555) 019-2831",
+                score: 92,
+                tier: "Hot",
+                tenureYears: 9.4,
+                estValue: "$18.5M",
+                lastTransactDate: "Nov 2016",
+                loanMaturity: "4 Months (Refi Risk)",
+                capRate: "5.8%",
+                occupancy: "78% (Lease Rollover Q3)",
+                confidence: "High (0.91)",
+                signals: [
+                    "CMBS Loan maturing in 120 days with floating rate exposure.",
+                    "Anchor tenant lease expires in 5 months; non-renewal notice filed.",
+                    "9.4 year tenure exceeds regional industrial hold pattern (7.1 yrs)."
+                ],
+                history: [
+                    { date: "Aug 12, 2026", note: "Left voicemail regarding upcoming refi window.", author: "M. Vance" }
+                ]
+            },
+            {
+                id: 2,
+                address: "450 Commerce Parkway",
+                subtext: "Class B Office, Parcel #12-883-04",
+                assetClass: "Office",
+                owner: "Vanguard Metro Partners Trust",
+                ownerType: "Institutional",
+                contactName: "Sarah Jenkins (Asset Manager)",
+                phone: "(555) 014-9920",
+                score: 85,
+                tier: "Hot",
+                tenureYears: 8.1,
+                estValue: "$24.0M",
+                lastTransactDate: "Feb 2018",
+                loanMaturity: "7 Months",
+                capRate: "7.2%",
+                occupancy: "64% (Sublease spike)",
+                confidence: "High (0.88)",
+                signals: [
+                    "Substantial vacancy surge (+22%) in local CBD office submarket.",
+                    "Debt yield dropped below 8% covenant threshold based on tax filings.",
+                    "Institutional fund entering final harvest window (Year 8)."
+                ],
+                history: []
+            },
+            {
+                id: 3,
+                address: "8821 Westside Blvd",
+                subtext: "120-Unit Multi-Family, Parcel #88-102-99",
+                assetClass: "Multi-Family",
+                owner: "Garrison, Edward & Helena",
+                ownerType: "Private Individual",
+                contactName: "Edward Garrison",
+                phone: "(555) 017-4411",
+                score: 74,
+                tier: "Warm",
+                tenureYears: 14.2,
+                estValue: "$31.2M",
+                lastTransactDate: "May 2012",
+                loanMaturity: "Clear (Unencumbered)",
+                capRate: "5.1%",
+                occupancy: "96%",
+                confidence: "Medium (0.74)",
+                signals: [
+                    "High tenure (14+ yrs) with unencumbered equity position.",
+                    "Recent permit filings indicate deferred CapEx requirements (Roof/HVAC).",
+                    "Estate planning triggers detected in tax assessments."
+                ],
+                history: []
+            },
+            {
+                id: 4,
+                address: "1200 Retail Gateway Center",
+                subtext: "Strip Center, Parcel #03-441-12",
+                assetClass: "Retail",
+                owner: "Gateway Plaza Realty Corp",
+                ownerType: "LLC",
+                contactName: "David Sterling",
+                phone: "(555) 012-3390",
+                score: 61,
+                tier: "Warm",
+                tenureYears: 6.0,
+                estValue: "$12.8M",
+                lastTransactDate: "Aug 2020",
+                loanMaturity: "18 Months",
+                capRate: "6.5%",
+                occupancy: "88%",
+                confidence: "Medium (0.69)",
+                signals: [
+                    "Nearby retail comps showing 12% valuation compression.",
+                    "Two adjacent retail parcels sold in last 90 days."
+                ],
+                history: []
+            },
+            {
+                id: 5,
+                address: "701 Sunrise Highway",
+                subtext: "Flex / Light Industrial, Parcel #55-112-00",
+                assetClass: "Industrial",
+                owner: "Apex Industrial Holdings",
+                ownerType: "LLC",
+                contactName: "Robert Vance",
+                phone: "(555) 018-7722",
+                score: 41,
+                tier: "Cold",
+                tenureYears: 3.1,
+                estValue: "$9.4M",
+                lastTransactDate: "Jan 2023",
+                loanMaturity: "48 Months",
+                capRate: "5.4%",
+                occupancy: "100%",
+                confidence: "Low Data Depth (0.52)",
+                signals: [
+                    "Low tenure duration relative to market cycle.",
+                    "Long-term single tenant lease locked through 2031."
+                ],
+                history: []
+            }
+        ];
 
-            // Data Store
-            const prospectsData = [
-                {
-                    id: 1,
-                    name: "Midwest Logistics Hub",
-                    address: "10400 W. Higgins Rd, Rosemont, IL",
-                    owner: "Apex Midwest Holdings LLC",
-                    submarket: "142,000 SF • Class B Industrial • O'Hare Submarket",
-                    propensity: 88,
-                    propensityLevel: "high",
-                    tenure: "9.4 Yrs",
-                    debtMaturity: "4 Mos",
-                    typeTag: "refi",
-                    valRange: "$18.5M - $20.2M",
-                    psf: "$134 / SF",
-                    origPurchase: "$12.1M (2017)",
-                    gain: "Implied Gain: +57%",
-                    drivers: [
-                        { label: "Hold Period (>8yr avg)", val: "9.4 Yrs", color: "var(--accent-green)" },
-                        { label: "CMBS Loan Maturity", val: "Q4 2026", color: "var(--accent-red)" },
-                        { label: "Submarket Cap Rate Spread", val: "+45 bps", color: "var(--accent-yellow)" }
-                    ],
-                    contact: {
-                        name: "Robert Vance",
-                        role: "Managing Principal @ Apex Midwest Holdings",
-                        phone: "(312) 555-0194",
-                        hq: "Chicago, IL",
-                        type: "Private Equity (Regional)"
-                    },
-                    battlecard: [
-                        "<strong>Refinance Hook:</strong> \"Robert, noticed your debt on Higgins Rd is coming up in Q4. Refi rates are ~200bps higher than your 2017 baseline—have you considered testing the market?\"",
-                        "<strong>Comp Leverage:</strong> \"9801 Devon just traded down the street at $138/SF (6.1% cap). That’s a peak benchmark for your asset class right now.\""
-                    ],
-                    comps: [
-                        { address: "9801 W. Devon Ave, Rosemont", date: "30 Days Ago", price: "$19,400,000", psf: "$138/SF", cap: "6.1%", match: "94% Match", color: "var(--accent-green)" },
-                        { address: "1050 Busse Hwy, Park Ridge", date: "2 Mos Ago", price: "$12,100,000", psf: "$129/SF", cap: "6.4%", match: "89% Match", color: "var(--accent-green)" },
-                        { address: "8800 Touhy Ave, Des Plaines", date: "4 Mos Ago", price: "$24,500,000", psf: "$131/SF", cap: "5.95%", match: "78% Match", color: "var(--accent-yellow)" }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: "Apex Flex Logistics Park",
-                    address: "2400 Northwest Hwy, Elgin, IL",
-                    owner: "Elgin Industrial Partners JV",
-                    submarket: "88,500 SF • Industrial • Elgin Submarket",
-                    propensity: 82,
-                    propensityLevel: "high",
-                    tenure: "11.2 Yrs",
-                    debtMaturity: "14 Mos",
-                    typeTag: "high",
-                    valRange: "$11.2M - $12.5M",
-                    psf: "$128 / SF",
-                    origPurchase: "$6.8M (2013)",
-                    gain: "Implied Gain: +72%",
-                    drivers: [
-                        { label: "Excess Hold Tenure", val: "11.2 Yrs", color: "var(--accent-green)" },
-                        { label: "Unlevered Yield Compression", val: "5.8% Cap", color: "var(--accent-green)" },
-                        { label: "Local Demand Surge", val: "+14% Rent", color: "var(--accent-yellow)" }
-                    ],
-                    contact: {
-                        name: "Sarah Lin",
-                        role: "VP of Real Estate @ Elgin Industrial Partners",
-                        phone: "(847) 555-8831",
-                        hq: "Schaumburg, IL",
-                        type: "Joint Venture / Syndicator"
-                    },
-                    battlecard: [
-                        "<strong>Tenure Hook:</strong> \"Sarah, you've held Elgin Flex for over 11 years. Yields in Elgin submarket are peaking—are you guys open to taking profit to redeploy?\"",
-                        "<strong>Demand Hook:</strong> \"Flex industrial vacancy in Northwest Hwy is under 3%. Buyers are paying premiums for this scale.\""
-                    ],
-                    comps: [
-                        { address: "2100 Randall Rd, Elgin", date: "12 Days Ago", price: "$11,800,000", psf: "$130/SF", cap: "6.0%", match: "96% Match", color: "var(--accent-green)" },
-                        { address: "150 Dunlop Ave, Dundee", date: "3 Mos Ago", price: "$8,900,000", psf: "$122/SF", cap: "6.5%", match: "83% Match", color: "var(--accent-yellow)" }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: "Southlake Commerce Center",
-                    address: "7100 S. Joliet Rd, Bolingbrook, IL",
-                    owner: "Southlake Realty Trust",
-                    submarket: "210,000 SF • Multi-Tenant • I-55 Corridor",
-                    propensity: 64,
-                    propensityLevel: "med",
-                    tenure: "6.1 Yrs",
-                    debtMaturity: "18 Mos",
-                    typeTag: "high",
-                    valRange: "$26.0M - $28.5M",
-                    psf: "$124 / SF",
-                    origPurchase: "$20.5M (2018)",
-                    gain: "Implied Gain: +31%",
-                    drivers: [
-                        { label: "High Vacancy Risk", val: "18% Vacant", color: "var(--accent-red)" },
-                        { label: "Hold Period", val: "6.1 Yrs", color: "var(--accent-yellow)" },
-                        { label: "Anchor Lease Expiry", val: "11 Mos", color: "var(--accent-yellow)" }
-                    ],
-                    contact: {
-                        name: "David Miller",
-                        role: "Asset Manager @ Southlake Realty",
-                        phone: "(630) 555-4920",
-                        hq: "Naperville, IL",
-                        type: "Private Family Office"
-                    },
-                    battlecard: [
-                        "<strong>Value-Add Hook:</strong> \"David, I see the 18% vacancy on Joliet Rd. We have two buyers looking specifically for value-add industrial along I-55 who will take leasing risk off your plate.\""
-                    ],
-                    comps: [
-                        { address: "6500 Veterans Blvd, Bolingbrook", date: "1 Mo Ago", price: "$27,100,000", psf: "$125/SF", cap: "6.2%", match: "91% Match", color: "var(--accent-green)" }
-                    ]
-                },
-                {
-                    id: 4,
-                    name: "Oakton Industrial Plaza",
-                    address: "1800 E. Oakton St, Des Plaines, IL",
-                    owner: "Des Plaines Holdings LLC",
-                    submarket: "45,000 SF • Infill Warehouse • Des Plaines",
-                    propensity: 59,
-                    propensityLevel: "med",
-                    tenure: "14.0 Yrs",
-                    debtMaturity: "None (Free & Clear)",
-                    typeTag: "high",
-                    valRange: "$5.8M - $6.4M",
-                    psf: "$132 / SF",
-                    origPurchase: "$2.9M (2010)",
-                    gain: "Implied Gain: +110%",
-                    drivers: [
-                        { label: "Generational Hold", val: "14.0 Yrs", color: "var(--accent-green)" },
-                        { label: "Free & Clear Title", val: "0% Debt", color: "var(--accent-green)" }
-                    ],
-                    contact: {
-                        name: "Arthur Pendelton",
-                        role: "Owner / Individual Principal",
-                        phone: "(847) 555-3011",
-                        hq: "Des Plaines, IL",
-                        type: "Private Individual"
-                    },
-                    battlecard: [
-                        "<strong>Estate Hook:</strong> \"Arthur, you've owned Oakton St for 14 years with zero debt. Capital gains tax deferral strategies like 1031s into STNL assets are really appealing for owners looking to retire from management.\""
-                    ],
-                    comps: [
-                        { address: "1950 Touhy Ave, Des Plaines", date: "2 Mos Ago", price: "$6,200,000", psf: "$135/SF", cap: "5.8%", match: "88% Match", color: "var(--accent-green)" }
-                    ]
-                }
-            ];
+        let selectedLeadId = 1;
 
-            // State
-            let currentProspectId = 1;
-            let currentFilter = 'all';
-            let isCallActive = false;
-            let callTimerInterval = null;
-            let callSeconds = 0;
-            let completedCallsCount = 42;
-            let pipelineSourced = 14.2;
+        function renderTable(data) {
+            const tbody = document.getElementById('leadTableBody');
+            tbody.innerHTML = '';
 
-            // Toast Helper
-            function showToast(message, type = 'info') {
-                const container = document.getElementById('toast-container');
-                if (!container) return;
-                const toast = document.createElement('div');
-                toast.className = 'toast';
-                if (type === 'error') {
-                    toast.style.borderLeftColor = 'var(--accent-red)';
-                }
-                toast.innerText = message;
-                container.appendChild(toast);
-
-                setTimeout(() => {
-                    toast.remove();
-                }, 3000);
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem; color: var(--text-muted);">No matching property records found.</td></tr>`;
+                document.getElementById('recordCount').innerText = `(Showing 0 properties)`;
+                return;
             }
 
-            // Render Prospect Cards List
-            function renderProspects() {
-                const container = document.getElementById('prospect-list-container');
-                if (!container) return;
-                container.innerHTML = '';
+            document.getElementById('recordCount').innerText = `(Showing ${data.length} of ${leadsData.length} properties)`;
 
-                const filtered = prospectsData.filter(p => {
-                    if (currentFilter === 'high') return p.propensity >= 80;
-                    if (currentFilter === 'refi') return p.typeTag === 'refi';
-                    return true;
-                });
+            data.forEach(lead => {
+                const tr = document.createElement('tr');
+                tr.className = `lead-row ${lead.id === selectedLeadId ? 'selected' : ''}`;
+                tr.onclick = () => selectLead(lead.id);
 
-                filtered.forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = `prospect-card ${p.id === currentProspectId ? 'active' : ''}`;
-                    
-                    card.addEventListener('click', function () {
-                        selectProspect(p.id);
-                    });
+                let scoreClass = 'score-cold';
+                if (lead.score >= 80) scoreClass = 'score-hot';
+                else if (lead.score >= 50) scoreClass = 'score-warm';
 
-                    const tagClass = p.propensityLevel === 'high' ? 'tag-high' : 'tag-med';
-
-                    card.innerHTML = `
-                        <div class="card-top">
-                            <div class="property-name">${p.name}</div>
-                            <div class="propensity-tag ${tagClass}">
-                                <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                                ${p.propensity}% Propensity
-                            </div>
+                tr.innerHTML = `
+                    <td>
+                        <span class="score-pill ${scoreClass}">${lead.score}</span>
+                    </td>
+                    <td>
+                        <div class="property-cell">
+                            <span class="prop-address">${lead.address}</span>
+                            <span class="prop-sub">${lead.subtext}</span>
                         </div>
-                        <div class="property-sub">${p.submarket}</div>
-                        <div class="card-signals">
-                            <div class="signal-item"><strong>Tenure:</strong> ${p.tenure}</div>
-                            <div class="signal-item"><strong>Debt Maturity:</strong> ${p.debtMaturity}</div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
+                    </td>
+                    <td><span class="badge">${lead.assetClass}</span></td>
+                    <td>
+                        <div style="font-weight: 500;">${lead.owner}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">${lead.ownerType}</div>
+                    </td>
+                    <td>${lead.tenureYears} yrs</td>
+                    <td style="font-weight: 600;">${lead.estValue}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-            // Select a prospect and update all details
-            function selectProspect(id) {
-                if (isCallActive) {
-                    showToast("Please end the current call before switching prospects.", "error");
-                    return;
-                }
-
-                currentProspectId = id;
-                renderProspects();
-
-                const p = prospectsData.find(item => item.id === id);
-                if (!p) return;
-
-                // Column 2 Details Update
-                document.getElementById('prop-title').innerText = p.name;
-                document.getElementById('prop-address').innerText = `${p.address} • Owned by ${p.owner}`;
-                document.getElementById('score-value').innerText = p.propensity;
-                
-                const scoreCircle = document.getElementById('score-circle-bg');
-                const scoreColor = p.propensity >= 80 ? 'var(--accent-green)' : 'var(--accent-yellow)';
-                scoreCircle.style.background = `conic-gradient(${scoreColor} 0% ${p.propensity}%, var(--bg-surface-elevated) ${p.propensity}% 100%)`;
-
-                const probLabel = document.getElementById('prop-prob-label');
-                probLabel.innerText = p.propensity >= 80 ? 'High Transaction Probability' : 'Moderate Transaction Probability';
-                probLabel.style.color = scoreColor;
-
-                document.getElementById('prop-val-range').innerText = p.valRange;
-                document.getElementById('prop-psf').innerText = p.psf;
-                document.getElementById('prop-orig-purchase').innerText = p.origPurchase;
-                document.getElementById('prop-gain').innerText = p.gain;
-
-                // Drivers
-                const driverContainer = document.getElementById('driver-list-container');
-                driverContainer.innerHTML = '';
-                p.drivers.forEach(d => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <span><span class="dot" style="background:${d.color}"></span>${d.label}</span>
-                        <strong style="color:var(--text-main)">${d.val}</strong>
-                    `;
-                    driverContainer.appendChild(li);
-                });
-
-                // Comps Table
-                const compsContainer = document.getElementById('comps-table-body');
-                compsContainer.innerHTML = '';
-                p.comps.forEach(c => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td class="highlight">${c.address}</td>
-                        <td>${c.date}</td>
-                        <td>${c.price}</td>
-                        <td>${c.psf}</td>
-                        <td>${c.cap}</td>
-                        <td><span style="color:${c.color}; font-weight:600;">${c.match}</span></td>
-                    `;
-                    compsContainer.appendChild(tr);
-                });
-
-                // Column 3 Contact Info
-                document.getElementById('contact-name').innerText = p.contact.name;
-                document.getElementById('contact-role').innerText = p.contact.role;
-                document.getElementById('contact-phone').innerText = p.contact.phone;
-                document.getElementById('contact-hq').innerText = p.contact.hq;
-                document.getElementById('contact-type').innerText = p.contact.type;
-
-                // Battlecard
-                const battleContainer = document.getElementById('battlecard-content');
-                battleContainer.innerHTML = '';
-                p.battlecard.forEach(b => {
-                    const div = document.createElement('div');
-                    div.className = 'talking-point';
-                    div.innerHTML = b;
-                    battleContainer.appendChild(div);
-                });
-
-                showToast(`Loaded analytics for ${p.name}`);
-            }
-
-            // Dial / End Call Trigger
-            document.getElementById('dial-btn').addEventListener('click', function () {
-                const btn = document.getElementById('dial-btn');
-                const btnText = document.getElementById('dial-btn-text');
-                const statusText = document.getElementById('dialer-status-text');
-                const statusDot = document.getElementById('status-dot');
-                const timerDisplay = document.getElementById('call-timer-display');
-
-                if (!isCallActive) {
-                    isCallActive = true;
-                    btn.className = 'btn btn-end';
-                    btnText.innerText = 'End Call';
-                    statusText.innerText = 'Call in Progress';
-                    statusText.style.color = 'var(--accent-red)';
-                    statusDot.className = 'status-dot active-call';
-                    timerDisplay.style.display = 'block';
-
-                    callSeconds = 0;
-                    callTimerInterval = setInterval(() => {
-                        callSeconds++;
-                        const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
-                        const secs = String(callSeconds % 60).padStart(2, '0');
-                        timerDisplay.innerText = `IN CALL — ${mins}:${secs}`;
-                    }, 1000);
-
-                    const currentContact = prospectsData.find(p => p.id === currentProspectId).contact.name;
-                    showToast(`Dialing ${currentContact}...`);
+        function selectLead(id) {
+            selectedLeadId = id;
+            // Update selected class in table
+            const rows = document.querySelectorAll('.lead-row');
+            rows.forEach((row, index) => {
+                if (filteredData[index] && filteredData[index].id === id) {
+                    row.classList.add('selected');
                 } else {
-                    isCallActive = false;
-                    clearInterval(callTimerInterval);
-                    btn.className = 'btn btn-call';
-                    btnText.innerText = 'Dial Contact Now';
-                    statusText.innerText = 'Line Ready';
-                    statusText.style.color = 'var(--accent-green)';
-                    statusDot.className = 'status-dot';
-                    timerDisplay.style.display = 'none';
-
-                    showToast(`Call ended (${callSeconds}s). Log disposition below.`);
+                    row.classList.remove('selected');
                 }
             });
 
-            // Activity Log
-            document.getElementById('log-activity-btn').addEventListener('click', function () {
-                const select = document.getElementById('disposition-select');
-                const notes = document.getElementById('disposition-notes');
+            renderDetailPanel();
+        }
 
-                if (!select.value) {
-                    showToast("Please select a disposition outcome.", "error");
-                    return;
-                }
+        function renderDetailPanel() {
+            const panel = document.getElementById('detailPanel');
+            const lead = leadsData.find(l => l.id === selectedLeadId);
 
-                completedCallsCount++;
-                document.getElementById('daily-calls-val').innerText = `${completedCallsCount} / 60`;
-
-                if (select.value === 'connected' || select.value === 'followup') {
-                    pipelineSourced += 1.5;
-                    document.getElementById('pipeline-val').innerText = `$${pipelineSourced.toFixed(1)}M`;
-                }
-
-                showToast("Call activity logged and CRM updated!");
-
-                select.value = '';
-                notes.value = '';
-
-                if (currentProspectId < prospectsData.length) {
-                    selectProspect(currentProspectId + 1);
-                }
-            });
-
-            // Filters
-            function applyFilter(filterType, chipElement) {
-                currentFilter = filterType;
-                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                chipElement.classList.add('active');
-                renderProspects();
+            if (!lead) {
+                panel.innerHTML = `<div style="color: var(--text-muted);">Select a lead to view predictive breakdown.</div>`;
+                return;
             }
 
-            document.getElementById('filter-all').addEventListener('click', function () {
-                applyFilter('all', this);
-            });
-            document.getElementById('filter-high').addEventListener('click', function () {
-                applyFilter('high', this);
-            });
-            document.getElementById('filter-refi').addEventListener('click', function () {
-                applyFilter('refi', this);
-            });
-            document.getElementById('reset-filters-btn').addEventListener('click', function () {
-                applyFilter('all', document.getElementById('filter-all'));
+            let scoreClass = 'score-cold';
+            if (lead.score >= 80) scoreClass = 'score-hot';
+            else if (lead.score >= 50) scoreClass = 'score-warm';
+
+            const historyHtml = lead.history.length > 0 
+                ? lead.history.map(h => `
+                    <div class="history-item">
+                        <div class="history-meta">
+                            <span>${h.author}</span>
+                            <span>${h.date}</span>
+                        </div>
+                        <div>${h.note}</div>
+                    </div>
+                `).join('')
+                : `<div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 0.5rem;">No previous call logs logged.</div>`;
+
+            panel.innerHTML = `
+                <div class="panel-header">
+                    <div class="flex-between" style="margin-bottom: 0.5rem;">
+                        <span class="badge" style="background-color: var(--accent-red-light); color: var(--accent-red); font-weight:700;">${lead.tier.toUpperCase()} OPPORTUNITY</span>
+                        <span class="score-pill ${scoreClass}">${lead.score}/100</span>
+                    </div>
+                    <div class="panel-title">${lead.address}</div>
+                    <div class="panel-subtitle">${lead.assetClass} • ${lead.estValue} Est. Market Value</div>
+                    <div class="confidence-flag">
+                        <span class="confidence-dot ${lead.score < 50 ? 'low' : ''}"></span>
+                        Model Confidence: ${lead.confidence}
+                    </div>
+                </div>
+
+                <div class="section-title">Key Decision Signals</div>
+                <ul class="signal-list">
+                    ${lead.signals.map(s => `<li class="signal-item">${s}</li>`).join('')}
+                </ul>
+
+                <div class="section-title">Ownership & Loan Profile</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Owner Entity</span>
+                        <span class="info-val">${lead.owner}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Contact Person</span>
+                        <span class="info-val">${lead.contactName}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Tenure Length</span>
+                        <span class="info-val">${lead.tenureYears} Years</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Debt Maturity</span>
+                        <span class="info-val" style="color: var(--accent-red);">${lead.loanMaturity}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Current Cap Rate</span>
+                        <span class="info-val">${lead.capRate}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Occupancy Rate</span>
+                        <span class="info-val">${lead.occupancy}</span>
+                    </div>
+                </div>
+
+                <div class="call-log-box">
+                    <div class="flex-between" style="margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.8125rem; font-weight: 600;">Log Call Outcome</span>
+                        <span style="font-size: 0.75rem; color: var(--accent-red); font-weight:600;">${lead.phone}</span>
+                    </div>
+                    <textarea id="callNoteInput" class="textarea-sm" placeholder="Enter notes from phone conversation (e.g., Owner open to off-market LOI)..."></textarea>
+                    <div class="action-bar">
+                        <button class="btn btn-outline btn-sm" onclick="addCallLog('Left Voicemail')">Voicemail</button>
+                        <button class="btn btn-primary btn-sm" onclick="addCallLog('Connected / Follow-up')">Save Log</button>
+                    </div>
+
+                    <div class="section-title" style="margin-top: 1rem; margin-bottom: 0.5rem;">Activity History</div>
+                    <div class="history-list" id="historyList">
+                        ${historyHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        let filteredData = [...leadsData];
+
+        function filterLeads() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const assetFilter = document.getElementById('assetTypeFilter').value;
+            const scoreFilter = document.getElementById('scoreTierFilter').value;
+            const ownerFilter = document.getElementById('ownerTypeFilter').value;
+
+            filteredData = leadsData.filter(lead => {
+                const matchesSearch = lead.address.toLowerCase().includes(query) || 
+                                      lead.owner.toLowerCase().includes(query) ||
+                                      lead.subtext.toLowerCase().includes(query);
+
+                const matchesAsset = assetFilter === 'ALL' || lead.assetClass === assetFilter;
+                const matchesScore = scoreFilter === 'ALL' || lead.tier === scoreFilter;
+                const matchesOwner = ownerFilter === 'ALL' || lead.ownerType === ownerFilter;
+
+                return matchesSearch && matchesAsset && matchesScore && matchesOwner;
             });
 
-            // Nav Items
-            document.querySelectorAll('.sidebar .nav-item').forEach((item, index) => {
-                item.addEventListener('click', function () {
-                    document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
-                    this.classList.add('active');
-                    showToast(`Switched workspace view`);
+            if (filteredData.length > 0 && !filteredData.some(l => l.id === selectedLeadId)) {
+                selectedLeadId = filteredData[0].id;
+            }
+
+            renderTable(filteredData);
+            renderDetailPanel();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('assetTypeFilter').value = 'ALL';
+            document.getElementById('scoreTierFilter').value = 'ALL';
+            document.getElementById('ownerTypeFilter').value = 'ALL';
+            filterLeads();
+        }
+
+        function addCallLog(type) {
+            const input = document.getElementById('callNoteInput');
+            const noteText = input.value.trim();
+
+            if (!noteText && type === 'Connected / Follow-up') {
+                alert('Please enter call notes before saving.');
+                return;
+            }
+
+            const lead = leadsData.find(l => l.id === selectedLeadId);
+            if (lead) {
+                const finalNote = noteText ? `[${type}] ${noteText}` : `[${type}] Logged call attempt.`;
+                lead.history.unshift({
+                    date: "Just now",
+                    note: finalNote,
+                    author: "M. Vance"
                 });
-            });
+                renderDetailPanel();
+                showToast("Call log saved to CRM history.");
+            }
+        }
 
-            // Modal Triggering
-            document.getElementById('open-map-btn').addEventListener('click', function () {
-                const p = prospectsData.find(item => item.id === currentProspectId);
-                document.getElementById('modal-title').innerText = `GIS Parcel Overlay: ${p.name}`;
-                document.getElementById('modal-body').innerText = `Displaying tax parcel assessment boundaries, footprint zoning (M-1), and satellite imaging for ${p.address}. Owner of record: ${p.owner}.`;
-                
-                const overlay = document.getElementById('modal-overlay');
-                overlay.classList.add('active');
-            });
+        function triggerCallSequence() {
+            const lead = leadsData.find(l => l.id === selectedLeadId);
+            if (lead) {
+                showToast(`Initiating call session for ${lead.contactName} (${lead.phone})...`);
+            }
+        }
 
-            document.getElementById('close-modal-btn').addEventListener('click', function () {
-                const overlay = document.getElementById('modal-overlay');
-                overlay.classList.remove('active');
-            });
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
 
-            // Initial Execution
-            renderProspects();
-            selectProspect(1);
-
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable(leadsData);
+            renderDetailPanel();
         });
     </script>
 </body>

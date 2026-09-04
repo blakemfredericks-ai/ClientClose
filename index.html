@@ -125,7 +125,7 @@
             font-size: 12px;
         }
 
-        /* Main Workspace Layout */
+        /* Workspace Layout */
         .workspace {
             display: flex;
             flex: 1;
@@ -205,6 +205,8 @@
             font-size: 11px;
             cursor: pointer;
             font-weight: 500;
+            user-select: none;
+            transition: all 0.15s;
         }
 
         .filter-chip.active {
@@ -284,12 +286,6 @@
             margin-top: 8px;
         }
 
-        .signal-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
         .signal-item strong {
             color: var(--text-muted);
         }
@@ -356,7 +352,7 @@
             justify-content: space-between;
         }
 
-        /* Predictive Radar/Score Display */
+        /* Predictive Score Display */
         .score-container {
             display: flex;
             align-items: center;
@@ -372,6 +368,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            transition: background 0.3s;
         }
 
         .score-circle::before {
@@ -458,6 +455,32 @@
             justify-content: space-between;
         }
 
+        .status-badge {
+            font-size: 11px;
+            font-weight: normal;
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        .status-dot.active-call {
+            background: var(--accent-red);
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 1; }
+            to { opacity: 0.3; }
+        }
+
         .contact-card {
             padding: 16px;
             background: var(--bg-surface-elevated);
@@ -504,11 +527,16 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: filter 0.2s;
+            transition: all 0.2s;
+            user-select: none;
         }
 
         .btn:hover {
             filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn-call {
@@ -525,6 +553,20 @@
             background-color: var(--bg-surface-elevated);
             color: var(--text-main);
             border: 1px solid var(--border-strong);
+        }
+
+        /* Call Timer Overlay */
+        .call-timer {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
         /* Battlecard / Talking Points */
@@ -585,6 +627,11 @@
             border-radius: 4px;
             font-family: inherit;
             font-size: 12px;
+            outline: none;
+        }
+
+        select:focus, textarea:focus {
+            border-color: var(--accent-blue);
         }
 
         textarea {
@@ -592,7 +639,6 @@
             height: 50px;
         }
 
-        /* SVG Icons Inline Styling */
         .icon {
             width: 16px;
             height: 16px;
@@ -601,6 +647,66 @@
             stroke-width: 2;
             stroke-linecap: round;
             stroke-linejoin: round;
+        }
+
+        /* Modal Dialog */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-strong);
+            border-radius: 8px;
+            width: 400px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .modal-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .modal-body {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 200;
+        }
+
+        .toast {
+            background: var(--bg-surface-elevated);
+            border-left: 4px solid var(--accent-green);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: slideIn 0.2s forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
@@ -615,7 +721,7 @@
         <div class="header-metrics">
             <div class="metric-pill">
                 <span>Daily Calls:</span>
-                <span class="val">42 / 60</span>
+                <span class="val" id="daily-calls-val">42 / 60</span>
             </div>
             <div class="metric-pill">
                 <span>Connect Rate:</span>
@@ -623,7 +729,7 @@
             </div>
             <div class="metric-pill">
                 <span>Pipeline Sourced:</span>
-                <span class="val">$14.2M</span>
+                <span class="val" id="pipeline-val">$14.2M</span>
             </div>
         </div>
 
@@ -636,16 +742,16 @@
     <div class="workspace">
 
         <nav class="sidebar">
-            <div class="nav-item active" title="Predictive Prospecting">
+            <div class="nav-item active" onclick="switchTab(this, 'Predictive Prospecting')" title="Predictive Prospecting">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
-            <div class="nav-item" title="Cadences / Cold Calling">
+            <div class="nav-item" onclick="switchTab(this, 'Cadences / Cold Calling')" title="Cadences / Cold Calling">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </div>
-            <div class="nav-item" title="Market Comps & Analytics">
+            <div class="nav-item" onclick="switchTab(this, 'Market Comps & Analytics')" title="Market Comps & Analytics">
                 <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             </div>
-            <div class="nav-item" title="Saved Databases">
+            <div class="nav-item" onclick="switchTab(this, 'Saved Databases')" title="Saved Databases">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"/><line x1="4" y1="10" x2="20" y2="10"/></svg>
             </div>
         </nav>
@@ -654,85 +760,26 @@
             <div class="panel-header">
                 <div class="panel-title">
                     <span>Ranked Prospects</span>
-                    <span style="font-size: 11px; color: var(--accent-blue); cursor: pointer;">Filters (3)</span>
+                    <span style="font-size: 11px; color: var(--accent-blue); cursor: pointer;" onclick="clearFilters()">Reset Filters</span>
                 </div>
                 <div class="filter-bar">
-                    <div class="filter-chip active">Likely Sellers</div>
-                    <div class="filter-chip">Refinance Due</div>
-                    <div class="filter-chip">High Debt</div>
+                    <div class="filter-chip active" onclick="filterProspects(this, 'all')">All Ranked</div>
+                    <div class="filter-chip" onclick="filterProspects(this, 'high')">High Score</div>
+                    <div class="filter-chip" onclick="filterProspects(this, 'refi')">Refinance Due</div>
                 </div>
             </div>
 
-            <div class="prospect-list">
-                <div class="prospect-card active">
-                    <div class="card-top">
-                        <div class="property-name">Midwest Logistics Hub</div>
-                        <div class="propensity-tag tag-high">
-                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                            88% Propensity
-                        </div>
-                    </div>
-                    <div class="property-sub">142,000 SF • Class B Industrial • O'Hare Submarket</div>
-                    <div class="card-signals">
-                        <div class="signal-item"><strong>Tenure:</strong> 9.4 Yrs</div>
-                        <div class="signal-item"><strong>Debt Maturity:</strong> 4 Mos</div>
-                    </div>
+            <div class="prospect-list" id="prospect-list-container">
                 </div>
-
-                <div class="prospect-card">
-                    <div class="card-top">
-                        <div class="property-name">Apex Flex Logistics Park</div>
-                        <div class="propensity-tag tag-high">
-                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                            82% Propensity
-                        </div>
-                    </div>
-                    <div class="property-sub">88,500 SF • Industrial • Elgin Submarket</div>
-                    <div class="card-signals">
-                        <div class="signal-item"><strong>Tenure:</strong> 11.2 Yrs</div>
-                        <div class="signal-item"><strong>Comp Outlier:</strong> +22% Cap</div>
-                    </div>
-                </div>
-
-                <div class="prospect-card">
-                    <div class="card-top">
-                        <div class="property-name">Southlake Commerce Center</div>
-                        <div class="propensity-tag tag-med">
-                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                            64% Propensity
-                        </div>
-                    </div>
-                    <div class="property-sub">210,000 SF • Multi-Tenant • I-55 Corridor</div>
-                    <div class="card-signals">
-                        <div class="signal-item"><strong>Tenure:</strong> 6.1 Yrs</div>
-                        <div class="signal-item"><strong>Vacant:</strong> 18%</div>
-                    </div>
-                </div>
-
-                <div class="prospect-card">
-                    <div class="card-top">
-                        <div class="property-name">Oakton Industrial Plaza</div>
-                        <div class="propensity-tag tag-med">
-                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                            59% Propensity
-                        </div>
-                    </div>
-                    <div class="property-sub">45,000 SF • Infill Warehouse • Des Plaines</div>
-                    <div class="card-signals">
-                        <div class="signal-item"><strong>Tenure:</strong> 14.0 Yrs</div>
-                        <div class="signal-item"><strong>Owner:</strong> Private Individual</div>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <section class="panel-analytics">
             <div class="analytics-header">
                 <div class="analytics-title">
-                    <h2>Midwest Logistics Hub</h2>
-                    <p>10400 W. Higgins Rd, Rosemont, IL • Owned by Apex Midwest Holdings LLC</p>
+                    <h2 id="prop-title">Midwest Logistics Hub</h2>
+                    <p id="prop-address">10400 W. Higgins Rd, Rosemont, IL • Owned by Apex Midwest Holdings LLC</p>
                 </div>
-                <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:11px;">
+                <button class="btn btn-secondary" onclick="openMapModal()" style="width:auto; padding:6px 12px; font-size:11px;">
                     View Parcel Map
                 </button>
             </div>
@@ -741,26 +788,14 @@
                 <div class="card">
                     <div class="card-header-sm">
                         <span>Sell Propensity Breakdown</span>
-                        <span style="color:var(--accent-green)">High Transaction Probability</span>
+                        <span id="prop-prob-label" style="color:var(--accent-green)">High Transaction Probability</span>
                     </div>
                     <div class="score-container">
-                        <div class="score-circle">
-                            <div class="score-val">88</div>
+                        <div class="score-circle" id="score-circle-bg">
+                            <div class="score-val" id="score-value">88</div>
                         </div>
-                        <ul class="driver-list">
-                            <li>
-                                <span><span class="dot" style="background:var(--accent-green)"></span>Hold Period (>8yr avg)</span>
-                                <strong style="color:var(--text-main)">9.4 Yrs</strong>
-                            </li>
-                            <li>
-                                <span><span class="dot" style="background:var(--accent-green)"></span>CMBS Loan Maturity</span>
-                                <strong style="color:var(--accent-red)">Q4 2026</strong>
-                            </li>
-                            <li>
-                                <span><span class="dot" style="background:var(--accent-yellow)"></span>Submarket Cap Rate Spread</span>
-                                <strong style="color:var(--text-main)">+45 bps</strong>
-                            </li>
-                        </ul>
+                        <ul class="driver-list" id="driver-list-container">
+                            </ul>
                     </div>
                 </div>
 
@@ -769,13 +804,13 @@
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:6px;">
                         <div>
                             <div style="font-size:11px; color:var(--text-dark);">Est. Value Range</div>
-                            <div style="font-size:16px; font-weight:700; color:var(--text-main); margin-top:2px;">$18.5M - $20.2M</div>
-                            <div style="font-size:11px; color:var(--accent-green); margin-top:2px;">$134 / SF</div>
+                            <div style="font-size:16px; font-weight:700; color:var(--text-main); margin-top:2px;" id="prop-val-range">$18.5M - $20.2M</div>
+                            <div style="font-size:11px; color:var(--accent-green); margin-top:2px;" id="prop-psf">$134 / SF</div>
                         </div>
                         <div>
                             <div style="font-size:11px; color:var(--text-dark);">Original Purchase</div>
-                            <div style="font-size:14px; font-weight:600; color:var(--text-main); margin-top:2px;">$12.1M (2017)</div>
-                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Implied Gain: +57%</div>
+                            <div style="font-size:14px; font-weight:600; color:var(--text-main); margin-top:2px;" id="prop-orig-purchase">$12.1M (2017)</div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="prop-gain">Implied Gain: +57%</div>
                         </div>
                     </div>
                 </div>
@@ -785,7 +820,7 @@
                 <div class="card" style="grid-column: span 3;">
                     <div class="card-header-sm">
                         <span>Predictive Pattern Matching: Relevant Submarket Comps</span>
-                        <span style="color:var(--accent-blue);">3 Comparable Deals Flagged</span>
+                        <span style="color:var(--accent-blue);">Market Matched Deals</span>
                     </div>
                     <table class="table-comps">
                         <thead>
@@ -798,32 +833,8 @@
                                 <th>Similarity Index</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td class="highlight">9801 W. Devon Ave, Rosemont</td>
-                                <td>30 Days Ago</td>
-                                <td>$19,400,000</td>
-                                <td>$138/SF</td>
-                                <td>6.1%</td>
-                                <td><span style="color:var(--accent-green); font-weight:600;">94% Match</span></td>
-                            </tr>
-                            <tr>
-                                <td class="highlight">1050 Busse Hwy, Park Ridge</td>
-                                <td>2 Mos Ago</td>
-                                <td>$12,100,000</td>
-                                <td>$129/SF</td>
-                                <td>6.4%</td>
-                                <td><span style="color:var(--accent-green); font-weight:600;">89% Match</span></td>
-                            </tr>
-                            <tr>
-                                <td class="highlight">8800 Touhy Ave, Des Plaines</td>
-                                <td>4 Mos Ago</td>
-                                <td>$24,500,000</td>
-                                <td>$131/SF</td>
-                                <td>5.95%</td>
-                                <td><span style="color:var(--accent-yellow); font-weight:600;">78% Match</span></td>
-                            </tr>
-                        </tbody>
+                        <tbody id="comps-table-body">
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -832,33 +843,34 @@
         <section class="panel-dialer">
             <div class="dialer-header">
                 <span>Power Prospector</span>
-                <span style="font-size:11px; font-weight:normal; color:var(--accent-green); display:flex; align-items:center; gap:4px;">
-                    <span style="width:6px; height:6px; background:var(--accent-green); border-radius:50%;"></span>
-                    Line Ready
+                <span class="status-badge" id="dialer-status-badge">
+                    <span class="status-dot" id="status-dot"></span>
+                    <span id="dialer-status-text">Line Ready</span>
                 </span>
             </div>
 
             <div class="contact-card">
-                <div class="contact-name">Robert Vance</div>
-                <div class="contact-role">Managing Principal @ Apex Midwest Holdings</div>
+                <div class="contact-name" id="contact-name">Robert Vance</div>
+                <div class="contact-role" id="contact-role">Managing Principal @ Apex Midwest Holdings</div>
                 <div class="contact-detail">
                     <span style="color:var(--text-dark)">Direct Phone:</span>
-                    <span style="font-weight:600; color:var(--text-main);">(312) 555-0194</span>
+                    <span style="font-weight:600; color:var(--text-main);" id="contact-phone">(312) 555-0194</span>
                 </div>
                 <div class="contact-detail">
                     <span style="color:var(--text-dark)">HQ Location:</span>
-                    <span style="color:var(--text-muted)">Chicago, IL</span>
+                    <span style="color:var(--text-muted)" id="contact-hq">Chicago, IL</span>
                 </div>
                 <div class="contact-detail">
                     <span style="color:var(--text-dark)">Ownership Type:</span>
-                    <span style="color:var(--text-muted)">Private Equity (Regional)</span>
+                    <span style="color:var(--text-muted)" id="contact-type">Private Equity (Regional)</span>
                 </div>
             </div>
 
             <div class="dialer-controls">
-                <button class="btn btn-call">
+                <div class="call-timer" id="call-timer-display">IN CALL — 00:00</div>
+                <button class="btn btn-call" id="dial-btn" onclick="toggleCall()">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    Dial Contact Now
+                    <span id="dial-btn-text">Dial Contact Now</span>
                 </button>
             </div>
 
@@ -867,31 +879,27 @@
                     <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                     AI Context & Hook Generator
                 </div>
-                <div class="talking-point">
-                    <strong>Refinance Hook:</strong> "Robert, noticed your debt on Higgins Rd is coming up in Q4. Refi rates are ~200bps higher than your 2017 baseline—have you considered testing the market?"
-                </div>
-                <div class="talking-point">
-                    <strong>Comp Leverage:</strong> "9801 Devon just traded down the street at $138/SF (6.1% cap). That’s a peak benchmark for your asset class right now."
-                </div>
+                <div id="battlecard-content">
+                    </div>
             </div>
 
             <div class="disposition-area">
                 <div class="form-group">
                     <label>Call Outcome / Disposition</label>
-                    <select>
-                        <option>Select Outcome...</option>
-                        <option>Connected - Corrective Pitch Made</option>
-                        <option>Follow Up Requested (Send OM)</option>
-                        <option>Left Voicemail</option>
-                        <option>Not Interested / Holding Long Term</option>
-                        <option>Wrong Number / Outdated Contact</option>
+                    <select id="disposition-select">
+                        <option value="">Select Outcome...</option>
+                        <option value="connected">Connected - Corrective Pitch Made</option>
+                        <option value="followup">Follow Up Requested (Send OM)</option>
+                        <option value="vm">Left Voicemail</option>
+                        <option value="not_interested">Not Interested / Holding Long Term</option>
+                        <option value="wrong_number">Wrong Number / Outdated Contact</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Call Notes / Context</label>
-                    <textarea placeholder="e.g. Owner expressed interest in 1031 exchange options if price hits $20M..."></textarea>
+                    <textarea id="disposition-notes" placeholder="e.g. Owner expressed interest in 1031 exchange options..."></textarea>
                 </div>
-                <button class="btn btn-secondary">
+                <button class="btn btn-secondary" onclick="logActivity()">
                     Log Activity & Advance Pipeline
                 </button>
             </div>
@@ -899,5 +907,410 @@
 
     </div>
 
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-title" id="modal-title">GIS Parcel Overlay</div>
+            <div class="modal-body" id="modal-body">
+                Loading GIS boundary data and satellite overlays for property...
+            </div>
+            <button class="btn btn-secondary" onclick="closeModal()">Close Window</button>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // Data Store
+        const prospectsData = [
+            {
+                id: 1,
+                name: "Midwest Logistics Hub",
+                address: "10400 W. Higgins Rd, Rosemont, IL",
+                owner: "Apex Midwest Holdings LLC",
+                submarket: "142,000 SF • Class B Industrial • O'Hare Submarket",
+                propensity: 88,
+                propensityLevel: "high",
+                tenure: "9.4 Yrs",
+                debtMaturity: "4 Mos",
+                typeTag: "refi",
+                valRange: "$18.5M - $20.2M",
+                psf: "$134 / SF",
+                origPurchase: "$12.1M (2017)",
+                gain: "Implied Gain: +57%",
+                drivers: [
+                    { label: "Hold Period (>8yr avg)", val: "9.4 Yrs", color: "var(--accent-green)" },
+                    { label: "CMBS Loan Maturity", val: "Q4 2026", color: "var(--accent-red)" },
+                    { label: "Submarket Cap Rate Spread", val: "+45 bps", color: "var(--accent-yellow)" }
+                ],
+                contact: {
+                    name: "Robert Vance",
+                    role: "Managing Principal @ Apex Midwest Holdings",
+                    phone: "(312) 555-0194",
+                    hq: "Chicago, IL",
+                    type: "Private Equity (Regional)"
+                },
+                battlecard: [
+                    "<strong>Refinance Hook:</strong> \"Robert, noticed your debt on Higgins Rd is coming up in Q4. Refi rates are ~200bps higher than your 2017 baseline—have you considered testing the market?\"",
+                    "<strong>Comp Leverage:</strong> \"9801 Devon just traded down the street at $138/SF (6.1% cap). That’s a peak benchmark for your asset class right now.\""
+                ],
+                comps: [
+                    { address: "9801 W. Devon Ave, Rosemont", date: "30 Days Ago", price: "$19,400,000", psf: "$138/SF", cap: "6.1%", match: "94% Match", color: "var(--accent-green)" },
+                    { address: "1050 Busse Hwy, Park Ridge", date: "2 Mos Ago", price: "$12,100,000", psf: "$129/SF", cap: "6.4%", match: "89% Match", color: "var(--accent-green)" },
+                    { address: "8800 Touhy Ave, Des Plaines", date: "4 Mos Ago", price: "$24,500,000", psf: "$131/SF", cap: "5.95%", match: "78% Match", color: "var(--accent-yellow)" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Apex Flex Logistics Park",
+                address: "2400 Northwest Hwy, Elgin, IL",
+                owner: "Elgin Industrial Partners JV",
+                submarket: "88,500 SF • Industrial • Elgin Submarket",
+                propensity: 82,
+                propensityLevel: "high",
+                tenure: "11.2 Yrs",
+                debtMaturity: "14 Mos",
+                typeTag: "high",
+                valRange: "$11.2M - $12.5M",
+                psf: "$128 / SF",
+                origPurchase: "$6.8M (2013)",
+                gain: "Implied Gain: +72%",
+                drivers: [
+                    { label: "Excess Hold Tenure", val: "11.2 Yrs", color: "var(--accent-green)" },
+                    { label: "Unlevered Yield Compression", val: "5.8% Cap", color: "var(--accent-green)" },
+                    { label: "Local Demand Surge", val: "+14% Rent", color: "var(--accent-yellow)" }
+                ],
+                contact: {
+                    name: "Sarah Lin",
+                    role: "VP of Real Estate @ Elgin Industrial Partners",
+                    phone: "(847) 555-8831",
+                    hq: "Schaumburg, IL",
+                    type: "Joint Venture / Syndicator"
+                },
+                battlecard: [
+                    "<strong>Tenure Hook:</strong> \"Sarah, you've held Elgin Flex for over 11 years. Yields in Elgin submarket are peaking—are you guys open to taking profit to redeploy?\"",
+                    "<strong>Demand Hook:</strong> \"Flex industrial vacancy in Northwest Hwy is under 3%. Buyers are paying premiums for this scale.\""
+                ],
+                comps: [
+                    { address: "2100 Randall Rd, Elgin", date: "12 Days Ago", price: "$11,800,000", psf: "$130/SF", cap: "6.0%", match: "96% Match", color: "var(--accent-green)" },
+                    { address: "150 Dunlop Ave, Dundee", date: "3 Mos Ago", price: "$8,900,000", psf: "$122/SF", cap: "6.5%", match: "83% Match", color: "var(--accent-yellow)" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Southlake Commerce Center",
+                address: "7100 S. Joliet Rd, Bolingbrook, IL",
+                owner: "Southlake Realty Trust",
+                submarket: "210,000 SF • Multi-Tenant • I-55 Corridor",
+                propensity: 64,
+                propensityLevel: "med",
+                tenure: "6.1 Yrs",
+                debtMaturity: "18 Mos",
+                typeTag: "high",
+                valRange: "$26.0M - $28.5M",
+                psf: "$124 / SF",
+                origPurchase: "$20.5M (2018)",
+                gain: "Implied Gain: +31%",
+                drivers: [
+                    { label: "High Vacancy Risk", val: "18% Vacant", color: "var(--accent-red)" },
+                    { label: "Hold Period", val: "6.1 Yrs", color: "var(--accent-yellow)" },
+                    { label: "Anchor Lease Expiry", val: "11 Mos", color: "var(--accent-yellow)" }
+                ],
+                contact: {
+                    name: "David Miller",
+                    role: "Asset Manager @ Southlake Realty",
+                    phone: "(630) 555-4920",
+                    hq: "Naperville, IL",
+                    type: "Private Family Office"
+                },
+                battlecard: [
+                    "<strong>Value-Add Hook:</strong> \"David, I see the 18% vacancy on Joliet Rd. We have two buyers looking specifically for value-add industrial along I-55 who will take leasing risk off your plate.\""
+                ],
+                comps: [
+                    { address: "6500 Veterans Blvd, Bolingbrook", date: "1 Mo Ago", price: "$27,100,000", psf: "$125/SF", cap: "6.2%", match: "91% Match", color: "var(--accent-green)" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Oakton Industrial Plaza",
+                address: "1800 E. Oakton St, Des Plaines, IL",
+                owner: "Des Plaines Holdings LLC",
+                submarket: "45,000 SF • Infill Warehouse • Des Plaines",
+                propensity: 59,
+                propensityLevel: "med",
+                tenure: "14.0 Yrs",
+                debtMaturity: "None (Free & Clear)",
+                typeTag: "high",
+                valRange: "$5.8M - $6.4M",
+                psf: "$132 / SF",
+                origPurchase: "$2.9M (2010)",
+                gain: "Implied Gain: +110%",
+                drivers: [
+                    { label: "Generational Hold", val: "14.0 Yrs", color: "var(--accent-green)" },
+                    { label: "Free & Clear Title", val: "0% Debt", color: "var(--accent-green)" }
+                ],
+                contact: {
+                    name: "Arthur Pendelton",
+                    role: "Owner / Individual Principal",
+                    phone: "(847) 555-3011",
+                    hq: "Des Plaines, IL",
+                    type: "Private Individual"
+                },
+                battlecard: [
+                    "<strong>Estate Hook:</strong> \"Arthur, you've owned Oakton St for 14 years with zero debt. Capital gains tax deferral strategies like 1031s into STNL assets are really appealing for owners looking to retire from management.\""
+                ],
+                comps: [
+                    { address: "1950 Touhy Ave, Des Plaines", date: "2 Mos Ago", price: "$6,200,000", psf: "$135/SF", cap: "5.8%", match: "88% Match", color: "var(--accent-green)" }
+                ]
+            }
+        ];
+
+        // Active State
+        let currentProspectId = 1;
+        let isCallActive = false;
+        let callTimerInterval = null;
+        let callSeconds = 0;
+        let completedCallsCount = 42;
+        let pipelineSourced = 14.2;
+
+        // Render Functions
+        function renderProspects(filter = 'all') {
+            const container = document.getElementById('prospect-list-container');
+            container.innerHTML = '';
+
+            const filtered = prospectsData.filter(p => {
+                if (filter === 'high') return p.propensity >= 80;
+                if (filter === 'refi') return p.typeTag === 'refi';
+                return true;
+            });
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = `prospect-card ${p.id === currentProspectId ? 'active' : ''}`;
+                card.onclick = () => selectProspect(p.id);
+
+                const tagClass = p.propensityLevel === 'high' ? 'tag-high' : 'tag-med';
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div class="property-name">${p.name}</div>
+                        <div class="propensity-tag ${tagClass}">
+                            <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                            ${p.propensity}% Propensity
+                        </div>
+                    </div>
+                    <div class="property-sub">${p.submarket}</div>
+                    <div class="card-signals">
+                        <div class="signal-item"><strong>Tenure:</strong> ${p.tenure}</div>
+                        <div class="signal-item"><strong>Debt Maturity:</strong> ${p.debtMaturity}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectProspect(id) {
+            if (isCallActive) {
+                showToast("Please end the current call before switching prospects.", "error");
+                return;
+            }
+
+            currentProspectId = id;
+            renderProspects();
+
+            const p = prospectsData.find(item => item.id === id);
+            if (!p) return;
+
+            // Update Column 2 Details
+            document.getElementById('prop-title').innerText = p.name;
+            document.getElementById('prop-address').innerText = `${p.address} • Owned by ${p.owner}`;
+            document.getElementById('score-value').innerText = p.propensity;
+            
+            // Dynamic score ring gradient
+            const scoreCircle = document.getElementById('score-circle-bg');
+            const scoreColor = p.propensity >= 80 ? 'var(--accent-green)' : 'var(--accent-yellow)';
+            scoreCircle.style.background = `conic-gradient(${scoreColor} 0% ${p.propensity}%, var(--bg-surface-elevated) ${p.propensity}% 100%)`;
+
+            document.getElementById('prop-prob-label').innerText = p.propensity >= 80 ? 'High Transaction Probability' : 'Moderate Transaction Probability';
+            document.getElementById('prop-prob-label').style.color = scoreColor;
+
+            document.getElementById('prop-val-range').innerText = p.valRange;
+            document.getElementById('prop-psf').innerText = p.psf;
+            document.getElementById('prop-orig-purchase').innerText = p.origPurchase;
+            document.getElementById('prop-gain').innerText = p.gain;
+
+            // Render Drivers
+            const driverContainer = document.getElementById('driver-list-container');
+            driverContainer.innerHTML = '';
+            p.drivers.forEach(d => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span><span class="dot" style="background:${d.color}"></span>${d.label}</span>
+                    <strong style="color:var(--text-main)">${d.val}</strong>
+                `;
+                driverContainer.appendChild(li);
+            });
+
+            // Render Comps Table
+            const compsContainer = document.getElementById('comps-table-body');
+            compsContainer.innerHTML = '';
+            p.comps.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="highlight">${c.address}</td>
+                    <td>${c.date}</td>
+                    <td>${c.price}</td>
+                    <td>${c.psf}</td>
+                    <td>${c.cap}</td>
+                    <td><span style="color:${c.color}; font-weight:600;">${c.match}</span></td>
+                `;
+                compsContainer.appendChild(tr);
+            });
+
+            // Update Column 3 Contact Info
+            document.getElementById('contact-name').innerText = p.contact.name;
+            document.getElementById('contact-role').innerText = p.contact.role;
+            document.getElementById('contact-phone').innerText = p.contact.phone;
+            document.getElementById('contact-hq').innerText = p.contact.hq;
+            document.getElementById('contact-type').innerText = p.contact.type;
+
+            // Render Battlecard
+            const battleContainer = document.getElementById('battlecard-content');
+            battleContainer.innerHTML = '';
+            p.battlecard.forEach(b => {
+                const div = document.createElement('div');
+                div.className = 'talking-point';
+                div.innerHTML = b;
+                battleContainer.appendChild(div);
+            });
+
+            showToast(`Loaded analytics for ${p.name}`);
+        }
+
+        // Interactive Dialing Controls
+        function toggleCall() {
+            const btn = document.getElementById('dial-btn');
+            const btnText = document.getElementById('dial-btn-text');
+            const statusText = document.getElementById('dialer-status-text');
+            const statusDot = document.getElementById('status-dot');
+            const timerDisplay = document.getElementById('call-timer-display');
+
+            if (!isCallActive) {
+                // Start Call
+                isCallActive = true;
+                btn.className = 'btn btn-end';
+                btnText.innerText = 'End Call';
+                statusText.innerText = 'Call in Progress';
+                statusText.style.color = 'var(--accent-red)';
+                statusDot.className = 'status-dot active-call';
+                timerDisplay.style.display = 'block';
+
+                callSeconds = 0;
+                callTimerInterval = setInterval(() => {
+                    callSeconds++;
+                    const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+                    const secs = String(callSeconds % 60).padStart(2, '0');
+                    timerDisplay.innerText = `IN CALL — ${mins}:${secs}`;
+                }, 1000);
+
+                const currentContact = prospectsData.find(p => p.id === currentProspectId).contact.name;
+                showToast(`Dialing ${currentContact}...`);
+            } else {
+                // End Call
+                isCallActive = false;
+                clearInterval(callTimerInterval);
+                btn.className = 'btn btn-call';
+                btnText.innerText = 'Dial Contact Now';
+                statusText.innerText = 'Line Ready';
+                statusText.style.color = 'var(--accent-green)';
+                statusDot.className = 'status-dot';
+                timerDisplay.style.display = 'none';
+
+                showToast(`Call ended (${callSeconds} seconds). Log disposition below.`);
+            }
+        }
+
+        // Activity Logging
+        function logActivity() {
+            const select = document.getElementById('disposition-select');
+            const notes = document.getElementById('disposition-notes');
+
+            if (!select.value) {
+                showToast("Please select a disposition outcome.", "error");
+                return;
+            }
+
+            completedCallsCount++;
+            document.getElementById('daily-calls-val').innerText = `${completedCallsCount} / 60`;
+
+            if (select.value === 'connected' || select.value === 'followup') {
+                pipelineSourced += 1.5;
+                document.getElementById('pipeline-val').innerText = `$${pipelineSourced.toFixed(1)}M`;
+            }
+
+            showToast("Call activity logged and CRM updated!");
+
+            // Reset form
+            select.value = '';
+            notes.value = '';
+
+            // Auto-advance to next lead if available
+            if (currentProspectId < prospectsData.length) {
+                selectProspect(currentProspectId + 1);
+            }
+        }
+
+        // Navigation Tabs Interaction
+        function switchTab(element, name) {
+            document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            showToast(`Switched to ${name}`);
+        }
+
+        // Filtering
+        function filterProspects(chip, filterType) {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            renderProspects(filterType);
+        }
+
+        function clearFilters() {
+            const firstChip = document.querySelectorAll('.filter-chip')[0];
+            filterProspects(firstChip, 'all');
+        }
+
+        // Modal Controls
+        function openMapModal() {
+            const p = prospectsData.find(item => item.id === currentProspectId);
+            document.getElementById('modal-title').innerText = `GIS Parcel Overlay: ${p.name}`;
+            document.getElementById('modal-body').innerText = `Displaying tax parcel assessment boundaries, footprint zoning (M-1), and satellite imaging for ${p.address}. Owner of record: ${p.owner}.`;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            if (type === 'error') {
+                toast.style.borderLeftColor = 'var(--accent-red)';
+            }
+            toast.innerText = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Initialize App
+        window.onload = () => {
+            renderProspects();
+            selectProspect(1);
+        };
+    </script>
 </body>
 </html>
